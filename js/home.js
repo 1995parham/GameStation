@@ -14,6 +14,27 @@ function onHomeLoad() {
 
             document.getElementById("pwd").style.color =
                 xml.getElementsByTagName("pwd")[0].childNodes[0].nodeValue;
+
+            document.getElementById("games").children[0].style.backgroundColor =
+                xml.getElementsByTagName("gameicon")[0].getAttribute("color");
+            document.getElementById("games").children[0].onmouseover = function () {
+                this.style.backgroundColor =
+                    xml.getElementsByTagName("gameicon")[0].getAttribute("hover");
+            };
+            document.getElementById("games").children[0].onmouseout = function () {
+                this.style.backgroundColor =
+                    xml.getElementsByTagName("gameicon")[0].getAttribute("color");
+            };
+
+            var mouseOverOnlineGame = function () {
+                this.style.backgroundColor =
+                    xml.getElementsByTagName("game")[0].getAttribute("hover");
+            };
+
+            var mouseOutOnlineGame = function () {
+                this.style.backgroundColor =
+                    xml.getElementsByTagName("game")[0].getAttribute("color");
+            }
         }
     };
 }
