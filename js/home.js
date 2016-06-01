@@ -36,7 +36,7 @@ Game.prototype = {
 
 
         if (this.active)
-            top.onmousedown = this.onClick;
+            top.onmousedown = this._onBlockClick;
 
         return top;
     },
@@ -45,6 +45,9 @@ Game.prototype = {
         var item = document.createElement("li");
         item.innerHTML = this.name;
 
+        item.onmouseover = this._onItemMouseOver;
+        item.onmouseout = this._onItemMouseOut;
+
         return item;
     },
 
@@ -52,7 +55,7 @@ Game.prototype = {
         return this.name + " Game with " + this.onlines + " online players";
     },
 
-    onClick: function () {
+    _onBlockClick: function () {
         var request = new XMLHttpRequest();
         request.open("GET", "http://ie.ce-it.ir/hw3/xml/home.xml", true);
         request.send();
@@ -63,6 +66,14 @@ Game.prototype = {
                 window.alert(xml);
             }
         };
+    },
+
+    _onItemMouseOver: function () {
+
+    },
+
+    _onItemMouseOut: function () {
+
     }
 };
 
@@ -93,14 +104,14 @@ function onHomeLoad() {
                     xml.getElementsByTagName("gameicon")[0].getAttribute("color");
             };
 
-            var mouseOverOnlineGame = function () {
-                this.style.backgroundColor =
-                    xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("hover");
+            var hover = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("hover");
+            Game.prototype._onItemMouseOver = function () {
+                this.style.backgroundColor = hover;
             };
 
-            var mouseOutOnlineGame = function () {
-                this.style.backgroundColor =
-                    xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("color");
+            var color = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("color");
+            Game.prototype._onItemMouseOut = function () {
+                this.style.backgroundColor = color;
             };
 
 
@@ -124,7 +135,8 @@ function onHomeLoad() {
                 var g = new Game(name, onlines, imgPath, xmlPath, text, active);
 
                 document.getElementById("main-container").appendChild(g.getGameBlock());
-                document.getElementById("games").appendChild(g.getGameListItem());
+                if (g.active)
+                    document.getElementById("games").appendChild(g.getGameListItem());
             }
 
 
