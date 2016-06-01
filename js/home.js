@@ -86,60 +86,61 @@ function onHomeLoad() {
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
             var xml = request.responseXML;
-
-            document.getElementsByTagName("header")[0].style.backgroundColor =
-                xml.getElementsByTagName("background")[0].childNodes[0].nodeValue;
-
-            document.getElementById("pwd").style.color =
-                xml.getElementsByTagName("pwd")[0].childNodes[0].nodeValue;
-
-            document.getElementById("games").children[0].style.backgroundColor =
-                xml.getElementsByTagName("gameicon")[0].getAttribute("color");
-            document.getElementById("games").children[0].onmouseover = function () {
-                this.style.backgroundColor =
-                    xml.getElementsByTagName("gameicon")[0].getAttribute("hover");
-            };
-            document.getElementById("games").children[0].onmouseout = function () {
-                this.style.backgroundColor =
-                    xml.getElementsByTagName("gameicon")[0].getAttribute("color");
-            };
-
-            var hover = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("hover");
-            Game.prototype._onItemMouseOver = function () {
-                this.style.backgroundColor = hover;
-            };
-
-            var color = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("color");
-            Game.prototype._onItemMouseOut = function () {
-                this.style.backgroundColor = color;
-            };
-
-
-            var maxOnlinesBackground = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-background");
-            var maxOnlinesBorderWitdth = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-width");
-            var maxOnlinesBorderColor = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-color");
-            var maxOnlinesBorderStyle = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-style");
-
-            var gamesElements = xml.getElementsByTagName("games")[0].getElementsByTagName("game");
-            for (var i = 0; i < gamesElements.length; i++) {
-                var active = gamesElements[i].getAttribute("active") == "true";
-
-                var name = gamesElements[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
-                var onlines = gamesElements[i].getElementsByTagName("onlines")[0].childNodes[0].nodeValue;
-                var xmlPath = "";
-                if (active)
-                    xmlPath = gamesElements[i].getElementsByTagName("url")[0].childNodes[0].nodeValue;
-                var imgPath = gamesElements[i].getElementsByTagName("image")[0].childNodes[0].nodeValue;
-                var text = gamesElements[i].getElementsByTagName("text")[0].childNodes[0].nodeValue;
-
-                var g = new Game(name, onlines, imgPath, xmlPath, text, active);
-
-                document.getElementById("main-container").appendChild(g.getGameBlock());
-                if (g.active)
-                    document.getElementById("games").appendChild(g.getGameListItem());
-            }
-
-
+            onHomeXML(xml)
         }
     };
+}
+
+function onHomeXML(xml) {
+    document.getElementsByTagName("header")[0].style.backgroundColor =
+        xml.getElementsByTagName("background")[0].childNodes[0].nodeValue;
+
+    document.getElementById("pwd").style.color =
+        xml.getElementsByTagName("pwd")[0].childNodes[0].nodeValue;
+
+    document.getElementById("games").children[0].style.backgroundColor =
+        xml.getElementsByTagName("gameicon")[0].getAttribute("color");
+    document.getElementById("games").children[0].onmouseover = function () {
+        this.style.backgroundColor =
+            xml.getElementsByTagName("gameicon")[0].getAttribute("hover");
+    };
+    document.getElementById("games").children[0].onmouseout = function () {
+        this.style.backgroundColor =
+            xml.getElementsByTagName("gameicon")[0].getAttribute("color");
+    };
+
+    var hover = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("hover");
+    Game.prototype._onItemMouseOver = function () {
+        this.style.backgroundColor = hover;
+    };
+
+    var color = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("color");
+    Game.prototype._onItemMouseOut = function () {
+        this.style.backgroundColor = color;
+    };
+
+
+    var maxOnlinesBackground = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-background");
+    var maxOnlinesBorderWitdth = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-width");
+    var maxOnlinesBorderColor = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-color");
+    var maxOnlinesBorderStyle = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-style");
+
+    var gamesElements = xml.getElementsByTagName("games")[0].getElementsByTagName("game");
+    for (var i = 0; i < gamesElements.length; i++) {
+        var active = gamesElements[i].getAttribute("active") == "true";
+
+        var name = gamesElements[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+        var onlines = gamesElements[i].getElementsByTagName("onlines")[0].childNodes[0].nodeValue;
+        var xmlPath = "";
+        if (active)
+            xmlPath = gamesElements[i].getElementsByTagName("url")[0].childNodes[0].nodeValue;
+        var imgPath = gamesElements[i].getElementsByTagName("image")[0].childNodes[0].nodeValue;
+        var text = gamesElements[i].getElementsByTagName("text")[0].childNodes[0].nodeValue;
+
+        var g = new Game(name, onlines, imgPath, xmlPath, text, active);
+
+        document.getElementById("main-container").appendChild(g.getGameBlock());
+        if (g.active)
+            document.getElementById("games").appendChild(g.getGameListItem());
+    }
 }
