@@ -1,6 +1,13 @@
 function sudokuLoadXML(xml) {
-    xsltProcessor = new XSLTProcessor();
-    xsltProcessor.importStylesheet("etc/sudoku.xsl");
+
+    var request = new XMLHttpRequest();
+    request.open("GET", "etc/sudoku.xsl", false);
+    request.send();
+    var xsl = request.responseXML;
+
+    var xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsl);
     var result = xsltProcessor.transformToFragment(xml, document);
-    document.getElementById("main-container").innerHTML = result;
+    document.getElementById("main-container").innerHTML = "";
+    document.getElementById("main-container").appendChild(result);
 }
