@@ -36,7 +36,7 @@ Game.prototype = {
 
 
         if (this.active)
-            top.onmousedown = this._onBlockClick;
+            top.onmousedown = this._onBlockClick();
 
         return top;
     },
@@ -45,8 +45,9 @@ Game.prototype = {
         var item = document.createElement("li");
         item.innerHTML = this.name;
 
-        item.onmouseover = this._onItemMouseOver;
-        item.onmouseout = this._onItemMouseOut;
+        item.onmouseover = this._onItemMouseOver();
+        item.onmouseout = this._onItemMouseOut();
+        item.style.backgroundColor = this._itemColor;
 
         return item;
     },
@@ -56,25 +57,37 @@ Game.prototype = {
     },
 
     _onBlockClick: function () {
-        var request = new XMLHttpRequest();
-        request.open("GET", "http://ie.ce-it.ir/hw3/xml/home.xml", true);
-        request.send();
+        var that = this;
+        return function () {
+            var request = new XMLHttpRequest();
+            request.open("GET", that.xmlPath, true);
+            request.send();
 
-        request.onreadystatechange = function () {
-            if (request.readyState == 4 && request.status == 200) {
-                var xml = request.responseXML;
-                window.alert(xml);
-            }
+            request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    var xml = request.responseXML;
+                    window[that.name + "LoadXML"](xml);
+                }
+            };
         };
     },
 
     _onItemMouseOver: function () {
-
+        var that = this;
+        return function () {
+            this.style.backgroundColor = that._itemColorHover;
+        };
     },
 
     _onItemMouseOut: function () {
+        var that = this;
+        return function () {
+            this.style.backgroundColor = that._itemColor;
+        };
+    },
 
-    }
+    _itemColor: null,
+    _itemColorHover: null
 };
 
 
@@ -86,12 +99,12 @@ function onHomeLoad() {
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
             var xml = request.responseXML;
-            onHomeXML(xml)
+            homeLoadXML(xml)
         }
     };
 }
 
-function onHomeXML(xml) {
+function homeLoadXML(xml) {
     document.getElementsByTagName("header")[0].style.backgroundColor =
         xml.getElementsByTagName("background")[0].childNodes[0].nodeValue;
 
@@ -109,15 +122,12 @@ function onHomeXML(xml) {
             xml.getElementsByTagName("gameicon")[0].getAttribute("color");
     };
 
-    var hover = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("hover");
-    Game.prototype._onItemMouseOver = function () {
-        this.style.backgroundColor = hover;
-    };
+    /* initiate games static fields */
+    Game.prototype._itemColorHover =
+        xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("hover");
 
-    var color = xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("color");
-    Game.prototype._onItemMouseOut = function () {
-        this.style.backgroundColor = color;
-    };
+    Game.prototype._itemColor =
+        xml.getElementsByTagName("gameicon")[0].firstElementChild.getAttribute("color");
 
 
     var maxOnlinesBackground = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-background");
