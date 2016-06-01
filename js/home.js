@@ -1,10 +1,13 @@
 window.onload = onHomeLoad;
 
 
-function Game(name, onlines, imgPath) {
+function Game(name, onlines, imgPath, xmlPath, text, active) {
     this.name = name;
     this.onlines = onlines;
     this.imgPath = imgPath;
+    this.xmlPath = xmlPath;
+    this.text = text;
+    this.active = active;
 }
 
 Game.prototype = {
@@ -26,12 +29,41 @@ Game.prototype = {
         inner.appendChild(image);
 
         var par = document.createElement("p");
-        par.innerHTML = "Play " + this.name + "!";
+        par.innerHTML = this.text;
 
         top.appendChild(inner);
         top.appendChild(par);
-    }
 
+
+        if (this.active)
+            top.onmousedown = this.onClick;
+
+        return top;
+    },
+
+    getGameListItem: function () {
+        var item = document.createElement("li");
+        item.innerHTML = this.name;
+
+        return item;
+    },
+
+    toString: function () {
+        return this.name + " Game with " + this.onlines + " online players";
+    },
+
+    onClick: function () {
+        var request = new XMLHttpRequest();
+        request.open("GET", "http://ie.ce-it.ir/hw3/xml/home.xml", true);
+        request.send();
+
+        request.onreadystatechange = function () {
+            if (request.readyState == 4 && request.status == 200) {
+                var xml = request.responseXML;
+                window.alert(xml);
+            }
+        };
+    }
 };
 
 
@@ -73,7 +105,27 @@ function onHomeLoad() {
 
 
             var maxOnlinesBackground = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-background");
-            var maxOnlinesBorderWitdth = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-width")
+            var maxOnlinesBorderWitdth = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-width");
+            var maxOnlinesBorderColor = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-color");
+            var maxOnlinesBorderStyle = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-style");
+
+            var gamesElements = xml.getElementsByTagName("games")[0].getElementsByTagName("game");
+            for (var i = 0; i < gamesElements.length; i++) {
+                var active = gamesElements[i].getAttribute("active") == "true";
+
+                var name = gamesElements[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+                var onlines = gamesElements[i].getElementsByTagName("onlines")[0].childNodes[0].nodeValue;
+                var xmlPath = "";
+                if (active)
+                    xmlPath = gamesElements[i].getElementsByTagName("url")[0].childNodes[0].nodeValue;
+                var imgPath = gamesElements[i].getElementsByTagName("image")[0].childNodes[0].nodeValue;
+                var text = gamesElements[i].getElementsByTagName("text")[0].childNodes[0].nodeValue;
+
+                var g = new Game(name, onlines, imgPath, xmlPath, text, active);
+
+                document.getElementById("main-container").appendChild(g.getGameBlock());
+                document.getElementById("games").appendChild(g.getGameListItem());
+            }
 
 
         }
