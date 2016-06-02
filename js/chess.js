@@ -58,7 +58,7 @@ function ChessEngine(info, board) {
     this.board = board;
     this.info = info;
 
-    board.onCheesManEvent("onmousedown", this._onChessMenClick());
+    board.onCheesManEvent("onclick", this._onChessMenClick());
 }
 
 ChessEngine.prototype = {
