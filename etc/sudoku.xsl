@@ -21,9 +21,10 @@
                         </xsl:for-each>
                     </tr>
                 </xsl:for-each>
-
             </table>
         </div>
+        <div id="check-sudoku">Check it out!</div>
+        <div id="submit-sudoku">Submit</div>
     </xsl:template>
 
 </xsl:stylesheet>
