@@ -56,10 +56,14 @@ ChessInfo.prototype = {
 
 function ChessBoard() {
     this.board = [];
+    this.boardTrs = [];
     for (var i = 0; i < 8; i++) {
         var row = [];
+        var tr = document.createElement("tr");
+        this.boardTrs.push(tr);
         for (var j = 0; j < 8; j++) {
             var cell = new ChessMan(new ChessLocation(i, j));
+            tr.appendChild(cell.getChessManTd());
             row.push(cell);
         }
         this.board.push(row);
@@ -70,17 +74,23 @@ ChessBoard.prototype = {
     getBoardTable: function () {
         var top = document.createElement("table");
         for (var i = 0; i < 8; i++) {
-            var row = document.createElement("tr");
-            for (var j = 0; j < 8; j++) {
-                row.appendChild(this.board[i][j].getChessManTd());
-            }
-            top.appendChild(row);
+            top.appendChild(this.boardTrs[i]);
         }
         return top;
     },
 
-    putChessMan: function (chessMan, location) {
+    putChessMan: function (chessMan) {
+        var location = chessMan.location;
+        this.board[location.row][location.col] = chessMan;
+        this.boardTrs[location.row].replaceChild(chessMan.getChessManTd(),
+            this.boardTrs[location.row].childNodes[location.col]);
+    },
 
+    removeChessMan: function (location) {
+        var chessMan = new ChessMan(location);
+        this.board[location.row][location.col] = chessMan;
+        this.boardTrs[location.row].replaceChild(chessMan.getChessManTd(),
+            this.boardTrs[location.row].childNodes[location.col]);
     }
 };
 
@@ -113,6 +123,13 @@ ChessMan.prototype = {
     _chessManUnicode: ""
 };
 
+function ChessManPawn(location, color) {
+    ChessMan.call(this, location);
+    this.color = color;
+}
+
+ChessManPawn.prototype = new ChessMan();
+
 function chessLoadXML(xml) {
     var top = document.createElement("div");
     top.id = "chess";
@@ -133,5 +150,17 @@ function chessLoadXML(xml) {
     /* update main contents of page */
     document.getElementById("main-container").innerHTML = "";
     document.getElementById("main-container").appendChild(top);
+
+    /* PAWNS */
+    ChessManPawn.prototype._chessManUnicode =
+        xml.getElementsByTagName("chessmans")[0].getElementsByTagName("pawn")[0].getAttribute("unicode");
+
+    var pawnElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("pawn");
+    for (var i = 0; i < pawnElements.length; i++) {
+        var row = parseInt(pawnElements[i].getAttribute("row"));
+        var col = parseInt(pawnElements[i].getAttribute("col"));
+        var pawn = new ChessManPawn(new ChessLocation(row, col), "white");
+        board.putChessMan(pawn);
+    }
 
 }
