@@ -105,6 +105,23 @@ ChessEngine.prototype = {
     }
 };
 
+function ChessInventory() {
+    this.whiteInventory = [];
+    this.whiteInventoryDiv = null;
+    this.blackInventory = [];
+    this.blackInventoryDiv = null;
+}
+
+ChessInventory.prototype = {
+    getInventoryWhiteBlock: function () {
+
+    },
+
+    getInventoryBlackBlock: function () {
+
+    }
+};
+
 function ChessBoard(whiteField, blackField) {
     this.whiteField = whiteField;
     this.blackField = blackField;
@@ -179,10 +196,20 @@ ChessLocation.prototype = {};
 function ChessMan(location) {
     this.color = "";
     this.td = null;
+    this.span = null;
     this.location = location;
 }
 
 ChessMan.prototype = {
+
+    getChessManSpan: function () {
+        var data = document.createElement("span");
+        data.innerHTML = this._chessManUnicode;
+        data.style.color = color;
+        this.span = data;
+        return this.span;
+    },
+
     getChessManTd: function () {
         var data = document.createElement("td");
         data.setAttribute("draggable", "true");
