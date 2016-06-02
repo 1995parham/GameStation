@@ -137,6 +137,13 @@ function ChessManRook(locaton, color) {
 
 ChessManRook.prototype = new ChessMan();
 
+function ChessManKnight(location, color) {
+    ChessMan.call(this, location);
+    this.color = color;
+}
+
+ChessManKnight.prototype = new ChessMan();
+
 function chessLoadXML(xml) {
     var top = document.createElement("div");
     top.id = "chess";
@@ -183,20 +190,40 @@ function chessLoadXML(xml) {
     /* Rook */
     ChessManRook.prototype._chessManUnicode =
         xml.getElementsByTagName("chessmans")[0].getElementsByTagName("rook")[0].getAttribute("unicode");
-    
+
     var rooksElements, rook;
     rooksElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("rook");
     for (i = 0; i < rooksElements.length; i++) {
         row = parseInt(rooksElements[i].getAttribute("row"));
         col = parseInt(rooksElements[i].getAttribute("col"));
-        pawn = new ChessManRook(new ChessLocation(row, col), "white");
-        board.putChessMan(pawn);
+        rook = new ChessManRook(new ChessLocation(row, col), "white");
+        board.putChessMan(rook);
     }
     rooksElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("rook");
     for (i = 0; i < rooksElements.length; i++) {
         row = parseInt(rooksElements[i].getAttribute("row"));
         col = parseInt(rooksElements[i].getAttribute("col"));
-        pawn = new ChessManRook(new ChessLocation(row, col), "black");
-        board.putChessMan(pawn);
+        rook = new ChessManRook(new ChessLocation(row, col), "black");
+        board.putChessMan(rook);
+    }
+
+    /* Knight */
+    ChessManKnight.prototype._chessManUnicode =
+        xml.getElementsByTagName("chessmans")[0].getElementsByTagName("knight")[0].getAttribute("unicode");
+
+    var knightsElements, knight;
+    knightsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("knight");
+    for (i = 0; i < knightsElements.length; i++) {
+        row = parseInt(knightsElements[i].getAttribute("row"));
+        col = parseInt(knightsElements[i].getAttribute("col"));
+        knight = new ChessManKnight(new ChessLocation(row, col), "white");
+        board.putChessMan(knight);
+    }
+    knightsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("knight");
+    for (i = 0; i < knightsElements.length; i++) {
+        row = parseInt(knightsElements[i].getAttribute("row"));
+        col = parseInt(knightsElements[i].getAttribute("col"));
+        knight = new ChessManKnight(new ChessLocation(row, col), "black");
+        board.putChessMan(knight);
     }
 }
