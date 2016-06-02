@@ -59,7 +59,7 @@ function ChessBoard() {
     for (var i = 0; i < 8; i++) {
         var row = [];
         for (var j = 0; j < 8; j++) {
-            var cell = document.createElement("td");
+            var cell = new ChessMan(new ChessLocation(i, j));
             row.push(cell);
         }
         this.board.push(row);
@@ -72,24 +72,45 @@ ChessBoard.prototype = {
         for (var i = 0; i < 8; i++) {
             var row = document.createElement("tr");
             for (var j = 0; j < 8; j++) {
-                row.appendChild(this.board[i][j]);
+                row.appendChild(this.board[i][j].getChessManTd());
             }
             top.appendChild(row);
         }
         return top;
+    },
+
+    putChessMan: function (chessMan, location) {
+
     }
 };
 
-function ChessMan(img) {
-    this.img = img;
+function ChessLocation(row, col) {
+    this.row = row;
+    this.col = col;
+}
+
+ChessLocation.prototype = {};
+
+function ChessMan(location) {
+    this.color = "";
+    this.location = location;
 }
 
 ChessMan.prototype = {
-    getChessManImage: function () {
-        var image = document.createElement("img");
-        image.setAttribute("src", this.img);
-        image.setAttribute("alt", "");
-    }
+    getChessManTd: function () {
+        var data = document.createElement("td");
+        data.innerHTML = this._chessManUnicode;
+        data.style.color = this.color;
+        if ((this.location.row + this.location.col) % 2 == 0)
+            data.style.backgroundColor = this._whiteBackgroundColor;
+        else
+            data.style.backgroundColor = this._blackBackgroundColor;
+        return data;
+    },
+
+    _whiteBackgroundColor: "",
+    _blackBackgroundColor: "",
+    _chessManUnicode: ""
 };
 
 function chessLoadXML(xml) {
@@ -100,6 +121,10 @@ function chessLoadXML(xml) {
         xml.getElementsByTagName("score")[0].getElementsByTagName("white")[0].childNodes[0].nodeValue,
         xml.getElementsByTagName("score")[0].getElementsByTagName("black")[0].childNodes[0].nodeValue,
         xml.getElementsByTagName("chess")[0].getAttribute("turn"));
+
+    ChessMan.prototype._blackBackgroundColor = xml.getElementsByTagName("board")[0].getAttribute("black-cells");
+    ChessMan.prototype._whiteBackgroundColor = xml.getElementsByTagName("board")[0].getAttribute("white-cells");
+
     var board = new ChessBoard();
 
     top.appendChild(info.getInfoBlock());
