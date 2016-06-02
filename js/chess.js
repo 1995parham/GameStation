@@ -107,18 +107,33 @@ ChessEngine.prototype = {
 
 function ChessInventory() {
     this.whiteInventory = [];
-    this.whiteInventoryDiv = null;
+
+    this.whiteInventoryDiv = document.createElement("div");
+    this.whiteInventoryDiv.id = "white-chessman-panel";
+
     this.blackInventory = [];
-    this.blackInventoryDiv = null;
+
+    this.blackInventoryDiv = document.createElement("div");
+    this.blackInventoryDiv.id = "black-chessman-panel";
 }
 
 ChessInventory.prototype = {
     getInventoryWhiteBlock: function () {
-
+        return this.whiteInventoryDiv;
     },
 
     getInventoryBlackBlock: function () {
+        return this.blackInventoryDiv;
+    },
 
+    putChessMan: function (chessMan) {
+        if (chessMan.color == "white") {
+            this.whiteInventory.push(chessMan);
+            this.whiteInventoryDiv.appendChild(chessMan.getChessManSpan());
+        } else {
+            this.blackInventory.push(chessMan);
+            this.blackInventoryDiv.appendChild(chessMan.getChessManSpan());
+        }
     }
 };
 
@@ -205,7 +220,7 @@ ChessMan.prototype = {
     getChessManSpan: function () {
         var data = document.createElement("span");
         data.innerHTML = this._chessManUnicode;
-        data.style.color = color;
+        data.style.color = this.color;
         this.span = data;
         return this.span;
     },
@@ -313,8 +328,12 @@ function chessLoadXML(xml) {
         xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getAttribute("field")
     );
 
+    var inventory = new ChessInventory();
+
     top.appendChild(info.getInfoBlock());
+    top.appendChild(inventory.getInventoryWhiteBlock());
     top.appendChild(board.getBoardTable());
+    top.appendChild(inventory.getInventoryBlackBlock());
 
     /* update main contents of page */
     document.getElementById("main-container").innerHTML = "";
@@ -334,12 +353,20 @@ function chessLoadXML(xml) {
         pawn = new ChessManPawn(new ChessLocation(row, col), "white");
         board.putChessMan(pawn);
     }
+    for (i = 0; i < 8 - pawnsElements.length; i++) {
+        pawn = new ChessManPawn(new ChessLocation(0, 0), "white");
+        inventory.putChessMan(pawn);
+    }
     pawnsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("pawn");
     for (i = 0; i < pawnsElements.length; i++) {
         row = parseInt(pawnsElements[i].getAttribute("row"));
         col = parseInt(pawnsElements[i].getAttribute("col"));
         pawn = new ChessManPawn(new ChessLocation(row, col), "black");
         board.putChessMan(pawn);
+    }
+    for (i = 0; i < 8 - pawnsElements.length; i++) {
+        pawn = new ChessManPawn(new ChessLocation(0, 0), "black");
+        inventory.putChessMan(pawn);
     }
 
     /* Rook */
