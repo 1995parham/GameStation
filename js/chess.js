@@ -54,6 +54,24 @@ ChessInfo.prototype = {
     }
 };
 
+function ChessEngine(info, board) {
+    this.board = board;
+    this.info = info;
+
+    board.onCheesManEvent("onmousedown", this._onChessMenClick());
+}
+
+ChessEngine.prototype = {
+    _onChessMenClick: function () {
+        var that = this;
+        return function (row, col) {
+            return function () {
+                that.board.board[row][col].highlight();
+            };
+        };
+    }
+};
+
 function ChessBoard() {
     this.board = [];
     this.boardTrs = [];
@@ -91,6 +109,22 @@ ChessBoard.prototype = {
         this.board[location.row][location.col] = chessMan;
         this.boardTrs[location.row].replaceChild(chessMan.getChessManTd(),
             this.boardTrs[location.row].childNodes[location.col]);
+    },
+
+    getChessMan: function (location) {
+        return this.board[location.row][location.col];
+    },
+
+    /*
+     this function set return value of fn(row, col) as a event
+     handler for all chess cells :)
+     */
+    onCheesManEvent: function (event, fn) {
+        for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
+                this.boardTrs[i].childNodes[j][event] = fn(i, j);
+            }
+        }
     }
 };
 
@@ -103,19 +137,33 @@ ChessLocation.prototype = {};
 
 function ChessMan(location) {
     this.color = "";
+    this.td = null;
     this.location = location;
 }
 
 ChessMan.prototype = {
     getChessManTd: function () {
-        var data = document.createElement("td");
-        data.innerHTML = this._chessManUnicode;
-        data.style.color = this.color;
-        if ((this.location.row + this.location.col) % 2 == 0)
-            data.style.backgroundColor = this._whiteBackgroundColor;
-        else
-            data.style.backgroundColor = this._blackBackgroundColor;
-        return data;
+        if (this.td == null) {
+            var data = document.createElement("td");
+            data.innerHTML = this._chessManUnicode;
+            data.style.color = this.color;
+            if ((this.location.row + this.location.col) % 2 == 0)
+                data.style.backgroundColor = this._whiteBackgroundColor;
+            else
+                data.style.backgroundColor = this._blackBackgroundColor;
+            this.td = data;
+        }
+        return this.td;
+    },
+
+    highlight: function () {
+        if (td != null)
+            this.td.style.color = "orange";
+    },
+
+    noHighlight: function () {
+        if (td != null)
+            this.td.style.color = this.color;
     },
 
     _whiteBackgroundColor: "",
@@ -226,4 +274,11 @@ function chessLoadXML(xml) {
         knight = new ChessManKnight(new ChessLocation(row, col), "black");
         board.putChessMan(knight);
     }
+
+    /* Queen */
+
+    /* King */
+
+    /* Game Engine :? */
+    new ChessEngine(info, board);
 }
