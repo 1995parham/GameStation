@@ -39,6 +39,8 @@ Sudoku.prototype = {
 function SudokuCell(value, element) {
     this.value = value;
     this.element = element;
+
+    this.element.onkeyup = this._onKeyUp();
 }
 
 SudokuCell.prototype = {
@@ -52,6 +54,19 @@ SudokuCell.prototype = {
         this.element.style.backgroundColor = "";
 
     },
+
+    _onKeyUp: function () {
+        var that = this;
+        return function () {
+            if (this.innerHTML.match(that._regExp)) {
+                that.value = this.innerHTML;
+            } else {
+                this.innerHTML = "";
+            }
+        };
+    },
+
+    _regExp: /\d/,
 
     _highlightColor: null,
 
