@@ -68,6 +68,8 @@ ChessEngine.prototype = {
         var that = this;
         return function (row, col) {
             return function (event) {
+                if (that.info.turn != that.board.getChessMan(new ChessLocation(row, col)).color)
+                    return false;
                 event.dataTransfer.setData("ChessLocation", JSON.stringify(new ChessLocation(row, col)));
                 that.board.getChessMan(new ChessLocation(row, col)).highlight();
             };
@@ -79,12 +81,16 @@ ChessEngine.prototype = {
         return function (row, col) {
             return function (event) {
                 event.preventDefault();
+
                 var location = JSON.parse(event.dataTransfer.getData("ChessLocation"));
+
                 var chessMan = that.board.getChessMan(location);
                 chessMan.noHighlight();
                 chessMan.location = new ChessLocation(row, col);
                 that.board.removeChessMan(new ChessLocation(location.row, location.col));
                 that.board.putChessMan(chessMan);
+
+                that.info.setTurn(chessMan.color == "white" ? "black" : "white");
             };
         };
     },
