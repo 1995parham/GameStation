@@ -157,13 +157,23 @@ ChessMan.prototype = {
     },
 
     highlight: function () {
-        if (td != null)
+        if (this.td != null)
             this.td.style.color = "orange";
     },
 
     noHighlight: function () {
-        if (td != null)
+        if (this.td != null)
             this.td.style.color = this.color;
+    },
+
+    /*
+     returns available moves of current ChessMan
+     as array of ChessLocation
+     this function use current board as 2D array of
+     for detecting valid moves :)
+     */
+    getMoves: function (board) {
+        return [];
     },
 
     _whiteBackgroundColor: "",
@@ -178,6 +188,9 @@ function ChessManPawn(location, color) {
 
 ChessManPawn.prototype = new ChessMan();
 
+ChessManPawn.prototype.getMoves = function (board) {
+};
+
 function ChessManRook(locaton, color) {
     ChessMan.call(this, locaton);
     this.color = color;
@@ -185,12 +198,29 @@ function ChessManRook(locaton, color) {
 
 ChessManRook.prototype = new ChessMan();
 
+ChessManRook.prototype.getMoves = function (board) {
+};
+
 function ChessManKnight(location, color) {
     ChessMan.call(this, location);
     this.color = color;
 }
 
 ChessManKnight.prototype = new ChessMan();
+
+function ChessManQueen(location, color) {
+    ChessMan.call(this, location);
+    this.color = color;
+}
+
+ChessManQueen.prototype = new ChessMan();
+
+function ChessManKing(location, color) {
+    ChessMan.call(this, location);
+    this.color = color;
+}
+
+ChessManKing.prototype = new ChessMan();
 
 function chessLoadXML(xml) {
     var top = document.createElement("div");
@@ -276,8 +306,44 @@ function chessLoadXML(xml) {
     }
 
     /* Queen */
+    ChessManQueen.prototype._chessManUnicode =
+        xml.getElementsByTagName("chessmans")[0].getElementsByTagName("queen")[0].getAttribute("unicode");
+
+    var queensElements, queen;
+    queensElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("queen");
+    for (i = 0; i < queensElements.length; i++) {
+        row = parseInt(queensElements[i].getAttribute("row"));
+        col = parseInt(queensElements[i].getAttribute("col"));
+        queen = new ChessManQueen(new ChessLocation(row, col), "white");
+        board.putChessMan(queen);
+    }
+    queensElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("queen");
+    for (i = 0; i < queensElements.length; i++) {
+        row = parseInt(queensElements[i].getAttribute("row"));
+        col = parseInt(queensElements[i].getAttribute("col"));
+        queen = new ChessManQueen(new ChessLocation(row, col), "black");
+        board.putChessMan(queen);
+    }
 
     /* King */
+    ChessManKing.prototype._chessManUnicode =
+        xml.getElementsByTagName("chessmans")[0].getElementsByTagName("king")[0].getAttribute("unicode");
+
+    var kingsElements, king;
+    kingsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("king");
+    for (i = 0; i < queensElements.length; i++) {
+        row = parseInt(kingsElements[i].getAttribute("row"));
+        col = parseInt(kingsElements[i].getAttribute("col"));
+        king = new ChessManKing(new ChessLocation(row, col), "white");
+        board.putChessMan(king);
+    }
+    kingsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("king");
+    for (i = 0; i < kingsElements.length; i++) {
+        row = parseInt(kingsElements[i].getAttribute("row"));
+        col = parseInt(kingsElements[i].getAttribute("col"));
+        king = new ChessManKing(new ChessLocation(row, col), "black");
+        board.putChessMan(king);
+    }
 
     /* Game Engine :? */
     new ChessEngine(info, board);
