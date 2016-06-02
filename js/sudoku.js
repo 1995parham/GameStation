@@ -33,6 +33,36 @@ Sudoku.prototype = {
                 }
             }
         };
+    },
+
+    submit: function () {
+        var xml = (new DOMParser()).parseFromString('<?xml version="1.0" encoding="utf-8"?><solution></solution>', "text/xml");
+
+        var cells = xml.createElement("cells");
+        for (var i = 0; i < this.cells.length; i++) {
+            var cell = xml.createElement("cell");
+            cell.setAttribute("postval", Math.floor(i / 9) * 100 + (i % 9) * 10 + parseInt(this.cells[i].value));
+            cell.appendChild(xml.createTextNode(this.cells[i].value));
+            cells.appendChild(cell);
+        }
+
+        var student = xml.createElement("student");
+        student.setAttribute("id", "9231058");
+        student.appendChild(xml.createTextNode("Parham Alvani"));
+
+        xml.getElementsByTagName("solution")[0].appendChild(cells);
+        xml.getElementsByTagName("solution")[0].appendChild(student);
+        
+        var request = new XMLHttpRequest();
+        request.open("POST", "http://ie.ce-it.ir/hw3/sudoku_validator.php", true);
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request.send("solution_xml=" + (new XMLSerializer()).serializeToString(xml));
+        request.onreadystatechange = function () {
+            if (request.readyState == 4 && request.status == 200) {
+                window.alert(request.responseText);
+            }
+        };
+
     }
 };
 
@@ -106,5 +136,10 @@ function sudokuLoadXML(xml) {
         }
         sudoku.addCell(new SudokuCell(value, cellsElements[i]));
     }
+
+    /* setup sudoku bottoms */
+    document.getElementById("submit-sudoku").onclick = function () {
+        sudoku.submit()
+    };
 
 }
