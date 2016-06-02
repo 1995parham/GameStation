@@ -58,21 +58,49 @@ function ChessEngine(info, board) {
     this.board = board;
     this.info = info;
 
-    board.onCheesManEvent("onclick", this._onChessMenClick());
+    board.onChessManEvent("ondragstart", this._onChessManDrag());
+    board.onChessManEvent("ondrop", this._onChessManDrop());
+    board.onChessManEvent("ondragover", this._onChessManDragOver());
 }
 
 ChessEngine.prototype = {
-    _onChessMenClick: function () {
+    _onChessManDrag: function () {
         var that = this;
         return function (row, col) {
-            return function () {
-                that.board.board[row][col].highlight();
+            return function (event) {
+                event.dataTransfer.setData("ChessLocation", JSON.stringify(new ChessLocation(row, col)));
+                that.board.getChessMan(new ChessLocation(row, col)).highlight();
             };
         };
+    },
+
+    _onChessManDrop: function () {
+        var that = this;
+        return function (row, col) {
+            return function (event) {
+                event.preventDefault();
+                var location = JSON.parse(event.dataTransfer.getData("ChessLocation"));
+                var chessMan = that.board.getChessMan(location);
+                chessMan.noHighlight();
+                chessMan.location = new ChessLocation(row, col);
+                that.board.removeChessMan(new ChessLocation(location.row, location.col));
+                that.board.putChessMan(chessMan);
+            };
+        };
+    },
+
+    _onChessManDragOver: function () {
+        return function (row, col) {
+            return function (event) {
+                event.preventDefault();
+            };
+        };
+
     }
 };
 
 function ChessBoard() {
+    this.handler = {};
     this.board = [];
     this.boardTrs = [];
     for (var i = 0; i < 8; i++) {
@@ -102,6 +130,8 @@ ChessBoard.prototype = {
         this.board[location.row][location.col] = chessMan;
         this.boardTrs[location.row].replaceChild(chessMan.getChessManTd(),
             this.boardTrs[location.row].childNodes[location.col]);
+        for (var ev in this.handler)
+            this.boardTrs[location.row].childNodes[location.col][ev] = this.handler[ev](location.row, location.col);
     },
 
     removeChessMan: function (location) {
@@ -119,12 +149,13 @@ ChessBoard.prototype = {
      this function set return value of fn(row, col) as a event
      handler for all chess cells :)
      */
-    onCheesManEvent: function (event, fn) {
+    onChessManEvent: function (event, fn) {
         for (var i = 0; i < 8; i++) {
             for (var j = 0; j < 8; j++) {
                 this.boardTrs[i].childNodes[j][event] = fn(i, j);
             }
         }
+        this.handler[event] = fn;
     }
 };
 
@@ -143,16 +174,15 @@ function ChessMan(location) {
 
 ChessMan.prototype = {
     getChessManTd: function () {
-        if (this.td == null) {
-            var data = document.createElement("td");
-            data.innerHTML = this._chessManUnicode;
-            data.style.color = this.color;
-            if ((this.location.row + this.location.col) % 2 == 0)
-                data.style.backgroundColor = this._whiteBackgroundColor;
-            else
-                data.style.backgroundColor = this._blackBackgroundColor;
-            this.td = data;
-        }
+        var data = document.createElement("td");
+        data.setAttribute("draggable", "true");
+        data.innerHTML = this._chessManUnicode;
+        data.style.color = this.color;
+        if ((this.location.row + this.location.col) % 2 == 0)
+            data.style.backgroundColor = this._whiteBackgroundColor;
+        else
+            data.style.backgroundColor = this._blackBackgroundColor;
+        this.td = data;
         return this.td;
     },
 
@@ -351,7 +381,7 @@ function chessLoadXML(xml) {
         king = new ChessManKing(new ChessLocation(row, col), "black");
         board.putChessMan(king);
     }
-    
+
     /* Bishop */
     ChessManBishop.prototype._chessManUnicode =
         xml.getElementsByTagName("chessmans")[0].getElementsByTagName("bishop")[0].getAttribute("unicode");
