@@ -96,7 +96,10 @@ function chessLoadXML(xml) {
     var top = document.createElement("div");
     top.id = "chess";
 
-    var info = new ChessInfo("0", "0", "black");
+    var info = new ChessInfo(
+        xml.getElementsByTagName("score")[0].getElementsByTagName("white")[0].childNodes[0].nodeValue,
+        xml.getElementsByTagName("score")[0].getElementsByTagName("black")[0].childNodes[0].nodeValue,
+        xml.getElementsByTagName("chess")[0].getAttribute("turn"));
     var board = new ChessBoard();
 
     top.appendChild(info.getInfoBlock());
