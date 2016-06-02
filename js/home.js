@@ -135,6 +135,7 @@ function homeLoadXML(xml) {
     var maxOnlinesBorderColor = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-color");
     var maxOnlinesBorderStyle = xml.getElementsByTagName("games")[0].getAttribute("max-onlines-border-style");
 
+    document.getElementById("main-container").innerHTML = "";
     var gamesElements = xml.getElementsByTagName("games")[0].getElementsByTagName("game");
     for (var i = 0; i < gamesElements.length; i++) {
         var active = gamesElements[i].getAttribute("active") == "true";
