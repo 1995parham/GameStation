@@ -105,8 +105,12 @@ ChessEngine.prototype = {
     }
 };
 
-function ChessBoard() {
+function ChessBoard(whiteField, blackField) {
+    this.whiteField = whiteField;
+    this.blackField = blackField;
+
     this.handler = {};
+
     this.board = [];
     this.boardTrs = [];
     for (var i = 0; i < 8; i++) {
@@ -277,7 +281,10 @@ function chessLoadXML(xml) {
     ChessMan.prototype._blackBackgroundColor = xml.getElementsByTagName("board")[0].getAttribute("black-cells");
     ChessMan.prototype._whiteBackgroundColor = xml.getElementsByTagName("board")[0].getAttribute("white-cells");
 
-    var board = new ChessBoard();
+    var board = new ChessBoard(
+        xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getAttribute("field"),
+        xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getAttribute("field")
+    );
 
     top.appendChild(info.getInfoBlock());
     top.appendChild(board.getBoardTable());
