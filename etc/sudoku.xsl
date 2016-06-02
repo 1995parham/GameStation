@@ -8,13 +8,13 @@
                         <xsl:for-each select="./cell">
                             <xsl:choose>
                                 <xsl:when test=". != ''">
-                                    <td contenteditable="false">
-                                        <xsl:value-of select="current()"/>
+                                    <td contenteditable="false" class="cell">
+                                        <xsl:value-of select="."/>
                                     </td>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <td contenteditable="true">
-                                        <xsl:value-of select="current()"/>
+                                    <td contenteditable="true" class="cell">
+                                        <xsl:value-of select="."/>
                                     </td>
                                 </xsl:otherwise>
                             </xsl:choose>
