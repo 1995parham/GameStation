@@ -222,6 +222,13 @@ function ChessManKing(location, color) {
 
 ChessManKing.prototype = new ChessMan();
 
+function ChessManBishop(location, color) {
+    ChessMan.call(this, location);
+    this.color = color;
+}
+
+ChessManBishop.prototype = new ChessMan();
+
 function chessLoadXML(xml) {
     var top = document.createElement("div");
     top.id = "chess";
@@ -343,6 +350,26 @@ function chessLoadXML(xml) {
         col = parseInt(kingsElements[i].getAttribute("col"));
         king = new ChessManKing(new ChessLocation(row, col), "black");
         board.putChessMan(king);
+    }
+    
+    /* Bishop */
+    ChessManBishop.prototype._chessManUnicode =
+        xml.getElementsByTagName("chessmans")[0].getElementsByTagName("bishop")[0].getAttribute("unicode");
+
+    var bishopsElements, bishop;
+    bishopsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("bishop");
+    for (i = 0; i < bishopsElements.length; i++) {
+        row = parseInt(bishopsElements[i].getAttribute("row"));
+        col = parseInt(bishopsElements[i].getAttribute("col"));
+        bishop = new ChessManBishop(new ChessLocation(row, col), "white");
+        board.putChessMan(bishop);
+    }
+    bishopsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("bishop");
+    for (i = 0; i < bishopsElements.length; i++) {
+        row = parseInt(bishopsElements[i].getAttribute("row"));
+        col = parseInt(bishopsElements[i].getAttribute("col"));
+        bishop = new ChessManBishop(new ChessLocation(row, col), "black");
+        board.putChessMan(bishop);
     }
 
     /* Game Engine :? */
