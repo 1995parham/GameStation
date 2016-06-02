@@ -130,6 +130,13 @@ function ChessManPawn(location, color) {
 
 ChessManPawn.prototype = new ChessMan();
 
+function ChessManRook(locaton, color) {
+    ChessMan.call(this, locaton);
+    this.color = color;
+}
+
+ChessManRook.prototype = new ChessMan();
+
 function chessLoadXML(xml) {
     var top = document.createElement("div");
     top.id = "chess";
@@ -151,16 +158,45 @@ function chessLoadXML(xml) {
     document.getElementById("main-container").innerHTML = "";
     document.getElementById("main-container").appendChild(top);
 
+    var row, col, i;
+
     /* PAWNS */
     ChessManPawn.prototype._chessManUnicode =
         xml.getElementsByTagName("chessmans")[0].getElementsByTagName("pawn")[0].getAttribute("unicode");
 
-    var pawnElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("pawn");
-    for (var i = 0; i < pawnElements.length; i++) {
-        var row = parseInt(pawnElements[i].getAttribute("row"));
-        var col = parseInt(pawnElements[i].getAttribute("col"));
-        var pawn = new ChessManPawn(new ChessLocation(row, col), "white");
+    var pawnsElements, pawn;
+    pawnsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("pawn");
+    for (i = 0; i < pawnsElements.length; i++) {
+        row = parseInt(pawnsElements[i].getAttribute("row"));
+        col = parseInt(pawnsElements[i].getAttribute("col"));
+        pawn = new ChessManPawn(new ChessLocation(row, col), "white");
+        board.putChessMan(pawn);
+    }
+    pawnsElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("pawn");
+    for (i = 0; i < pawnsElements.length; i++) {
+        row = parseInt(pawnsElements[i].getAttribute("row"));
+        col = parseInt(pawnsElements[i].getAttribute("col"));
+        pawn = new ChessManPawn(new ChessLocation(row, col), "black");
         board.putChessMan(pawn);
     }
 
+    /* Rook */
+    ChessManRook.prototype._chessManUnicode =
+        xml.getElementsByTagName("chessmans")[0].getElementsByTagName("rook")[0].getAttribute("unicode");
+    
+    var rooksElements, rook;
+    rooksElements = xml.getElementsByTagName("board")[0].getElementsByTagName("white")[0].getElementsByTagName("rook");
+    for (i = 0; i < rooksElements.length; i++) {
+        row = parseInt(rooksElements[i].getAttribute("row"));
+        col = parseInt(rooksElements[i].getAttribute("col"));
+        pawn = new ChessManRook(new ChessLocation(row, col), "white");
+        board.putChessMan(pawn);
+    }
+    rooksElements = xml.getElementsByTagName("board")[0].getElementsByTagName("black")[0].getElementsByTagName("rook");
+    for (i = 0; i < rooksElements.length; i++) {
+        row = parseInt(rooksElements[i].getAttribute("row"));
+        col = parseInt(rooksElements[i].getAttribute("col"));
+        pawn = new ChessManRook(new ChessLocation(row, col), "black");
+        board.putChessMan(pawn);
+    }
 }
