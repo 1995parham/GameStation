@@ -54,9 +54,10 @@ ChessInfo.prototype = {
     }
 };
 
-function ChessEngine(info, board) {
+function ChessEngine(info, board, inventory) {
     this.board = board;
     this.info = info;
+    this.inventory = inventory;
 
     board.onChessManEvent("ondragstart", this._onChessManDrag());
     board.onChessManEvent("ondrop", this._onChessManDrop());
@@ -470,5 +471,5 @@ function chessLoadXML(xml) {
     }
 
     /* Game Engine :? */
-    new ChessEngine(info, board);
+    new ChessEngine(info, board, inventory);
 }
