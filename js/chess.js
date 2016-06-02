@@ -167,7 +167,7 @@ function chessLoadXML(xml) {
 
     var row, col, i;
 
-    /* PAWNS */
+    /* Pawn */
     ChessManPawn.prototype._chessManUnicode =
         xml.getElementsByTagName("chessmans")[0].getElementsByTagName("pawn")[0].getAttribute("unicode");
 
