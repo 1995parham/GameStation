@@ -54,14 +54,53 @@ ChessInfo.prototype = {
     }
 };
 
+function ChessBoard() {
+    this.board = [];
+    for (var i = 0; i < 8; i++) {
+        var row = [];
+        for (var j = 0; j < 8; j++) {
+            var cell = document.createElement("td");
+            row.push(cell);
+        }
+        this.board.push(row);
+    }
+}
+
+ChessBoard.prototype = {
+    getBoardTable: function () {
+        var top = document.createElement("table");
+        for (var i = 0; i < 8; i++) {
+            var row = document.createElement("tr");
+            for (var j = 0; j < 8; j++) {
+                row.appendChild(this.board[i][j]);
+            }
+            top.appendChild(row);
+        }
+        return top;
+    }
+};
+
+function ChessMan(img) {
+    this.img = img;
+}
+
+ChessMan.prototype = {
+    getChessManImage: function () {
+        var image = document.createElement("img");
+        image.setAttribute("src", this.img);
+        image.setAttribute("alt", "");
+    }
+};
 
 function chessLoadXML(xml) {
     var top = document.createElement("div");
     top.id = "chess";
 
     var info = new ChessInfo("0", "0", "black");
+    var board = new ChessBoard();
 
     top.appendChild(info.getInfoBlock());
+    top.appendChild(board.getBoardTable());
 
     /* update main contents of page */
     document.getElementById("main-container").innerHTML = "";
