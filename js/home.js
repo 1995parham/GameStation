@@ -1,5 +1,4 @@
-window.onload = onHomeLoad;
-
+window.onload = initiation;
 
 function Game(name, onlines, imgPath, xmlPath, text, active) {
     this.name = name;
@@ -8,6 +7,8 @@ function Game(name, onlines, imgPath, xmlPath, text, active) {
     this.xmlPath = xmlPath;
     this.text = text;
     this.active = active;
+
+    this.xml = null;
 }
 
 Game.prototype = {
@@ -59,16 +60,23 @@ Game.prototype = {
     _onBlockClick: function () {
         var that = this;
         return function () {
-            var request = new XMLHttpRequest();
-            request.open("GET", that.xmlPath, true);
-            request.send();
+            document.getElementById("pwd").innerHTML = that.name;
 
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    var xml = request.responseXML;
-                    window[that.name + "LoadXML"](xml);
-                }
-            };
+            if (that.xml == null) {
+                var request = new XMLHttpRequest();
+                request.open("GET", that.xmlPath, true);
+                request.send();
+
+                request.onreadystatechange = function () {
+                    if (request.readyState == 4 && request.status == 200) {
+                        var xml = request.responseXML;
+                        that.xml = xml;
+                        window[that.name + "LoadXML"](xml);
+                    }
+                };
+            } else {
+                window[that.name + "LoadXML"](that.xml);
+            }
         };
     },
 
@@ -91,14 +99,21 @@ Game.prototype = {
 };
 
 
-function onHomeLoad() {
+function initiation() {
+    var xml;
+
+    document.getElementById("home-icon").onclick = function () {
+        document.getElementById("pwd").innerHTML = "home";
+        homeLoadXML(xml);
+    };
+
     var request = new XMLHttpRequest();
     request.open("GET", "http://ie.ce-it.ir/hw3/xml/home.xml", true);
     request.send();
 
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
-            var xml = request.responseXML;
+            xml = request.responseXML;
             homeLoadXML(xml)
         }
     };
