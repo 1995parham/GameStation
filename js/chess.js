@@ -156,11 +156,13 @@ function ChessInventory() {
 
     this.whiteInventoryDiv = document.createElement("div");
     this.whiteInventoryDiv.id = "white-chessman-panel";
+    this.whiteInventoryDiv.style.wordWrap = "break-word"
 
     this.blackInventory = [];
 
     this.blackInventoryDiv = document.createElement("div");
     this.blackInventoryDiv.id = "black-chessman-panel";
+    this.blackInventoryDiv.style.wordWrap = "break-word"
 }
 
 ChessInventory.prototype = {
