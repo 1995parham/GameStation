@@ -13,12 +13,13 @@ Sudoku.prototype = {
     _onCellMouseOver: function (cell) {
         var that = this;
         var value = cell.value;
+
         return function () {
-            for (var i = 0; i < that.cells.length; i++) {
-                if (value != "" && that.cells[i].value == value) {
-                    that.cells[i].highlight();
+            that.cells.forEach(function (cell) {
+                if (value != "" && cell.value == value) {
+                    cell.highlight();
                 }
-            }
+            });
         };
     },
 
@@ -27,11 +28,11 @@ Sudoku.prototype = {
         var value = cell.value;
 
         return function () {
-            for (var i = 0; i < that.cells.length; i++) {
-                if (value != "" && that.cells[i].value == value) {
-                    that.cells[i].noHighlight();
+            that.cells.forEach(function (cell) {
+                if (value != "" && cell.value == value) {
+                    cell.noHighlight();
                 }
-            }
+            });
         };
     },
 
@@ -82,21 +83,21 @@ SudokuCell.prototype = {
     noHighlight: function () {
         this.element.style.color = "";
         this.element.style.backgroundColor = "";
-
     },
 
     _onKeyUp: function () {
         var that = this;
+
         return function () {
-            if (this.innerHTML.match(that._regExp)) {
-                that.value = this.innerHTML;
+            if (that._regExp.test(that.element.innerHTML)) {
+                that.value = that.element.innerHTML;
             } else {
-                this.innerHTML = "";
+                that.element.innerHTML = "";
             }
         };
     },
 
-    _regExp: /\d/,
+    _regExp: /^[1-9]$/,
 
     _highlightColor: null,
 
