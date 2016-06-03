@@ -85,12 +85,25 @@ ChessEngine.prototype = {
             this.info.setBlackScore(score);
     },
 
-    isWhiteInCheck: function () {
-
-    },
-
-    isBlackInCheck: function () {
-
+    isCheck: function (color) {
+        var board = this.board;
+        for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
+                var chessMan = board.getChessMan(new ChessLocation(i, j));
+                if (chessMan.color == (color == "white") ? "black" : "white") {
+                    if (!chessMan.getMoves(this.board).every(function (obj) {
+                            if (obj.status) {
+                                var chessMan = board.getChessMan(new ChessLocation(obj.row, obj.col));
+                                return !(chessMan.color == color && chessMan instanceof ChessManKing);
+                            }
+                            return true;
+                        })) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     },
 
     _onChessManDrag: function () {
@@ -143,6 +156,9 @@ ChessEngine.prototype = {
                 that.chessManDie(that.board.getChessMan(chessMan.location));
                 that.board.removeChessMan(new ChessLocation(location.row, location.col));
                 that.board.putChessMan(chessMan);
+
+                if (that.isCheck((chessMan.color == "black") ? "white" : "black"))
+                    window.alert(((chessMan.color == "black") ? "white" : "black") + " is in check :(");
 
                 that.info.setTurn(chessMan.color == "white" ? "black" : "white");
             };
