@@ -121,7 +121,7 @@ ChessEngine.prototype = {
 
                 var chessMan = that.board.getChessMan(location);
                 chessMan.resetStyle();
-               
+
                 moves.forEach(function (obj) {
                     that.board.getChessMan(new ChessLocation(obj.row, obj.col)).resetStyle();
                 });
@@ -522,6 +522,191 @@ function ChessManQueen(location, color) {
 }
 
 ChessManQueen.prototype = new ChessMan();
+
+ChessManQueen.prototype.getMoves = function (board) {
+    var moves = [];
+    var row = this.location.row;
+    var col = this.location.col;
+    var i, j, chessMan;
+
+    for (i = row + 1; i < 8; i++) {
+        chessMan = board.getChessMan(new ChessLocation(i, col));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: i,
+                col: col,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: i,
+                col: col,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = row - 1; i >= 0; i--) {
+        chessMan = board.getChessMan(new ChessLocation(i, col));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: i,
+                col: col,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: i,
+                col: col,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = col + 1; i < 8; i++) {
+        chessMan = board.getChessMan(new ChessLocation(row, i));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: row,
+                col: i,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: row,
+                col: i,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = col - 1; i >= 0; i--) {
+        chessMan = board.getChessMan(new ChessLocation(row, i));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: row,
+                col: i,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: row,
+                col: i,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = row + 1, j = col + 1; i < 8, j < 8; i++, j++) {
+        chessMan = board.getChessMan(new ChessLocation(i, j));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: i,
+                col: j,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: i,
+                col: j,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = row - 1, j = col + 1; i >= 0, j < 8; i--, j++) {
+        chessMan = board.getChessMan(new ChessLocation(i, j));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: i,
+                col: j,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: i,
+                col: j,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = row + 1, j = col - 1; i < 8, j >= 0; i++, j--) {
+        chessMan = board.getChessMan(new ChessLocation(i, j));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: i,
+                col: j,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: i,
+                col: j,
+                status: true
+            });
+            break;
+        }
+    }
+
+    for (i = row - 1, j = col - 1; i >= 0, j >= 0; i--, j--) {
+        chessMan = board.getChessMan(new ChessLocation(i, j));
+        if (chessMan == null) {
+            break;
+        } else if (chessMan._chessManUnicode == "") {
+            moves.push({
+                row: i,
+                col: j,
+                status: false
+            });
+        } else if (chessMan.color == this.color) {
+            break;
+        } else if (chessMan.color != this.color) {
+            moves.push({
+                row: i,
+                col: j,
+                status: true
+            });
+            break;
+        }
+    }
+
+    return moves;
+};
 
 function ChessManKing(location, color) {
     ChessMan.call(this, location);
