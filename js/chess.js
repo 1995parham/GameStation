@@ -180,12 +180,15 @@ ChessEngine.prototype = {
                     chessManSrc.location = new ChessLocation(location.row, location.col);
                     that.board.putChessMan(chessManSrc);
                     that.board.putChessMan(chessManDst);
+                    that.notification.setNotificationMessage("Hey dude you are in check :(");
                     return false;
                 }
 
                 if (that.isCheck((chessManSrc.color == "black") ? "white" : "black"))
                     that.notification.setNotificationMessage(
                         ((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
+                else
+                    that.notification.setNotificationMessage("");
 
                 that.chessManDie(chessManDst);
                 chessManSrc.counter++;
@@ -370,7 +373,7 @@ ChessMan.prototype = {
 
     highlightSrcDst: function () {
         if (this.td != null)
-                this.td.style.backgroundColor = "#6A6A6A";
+            this.td.style.backgroundColor = "#6A6A6A";
     },
 
     resetStyle: function () {
