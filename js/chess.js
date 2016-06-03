@@ -70,7 +70,7 @@ ChessEngine.prototype = {
         return function (row, col) {
             return function (event) {
                 var chessMan = that.board.getChessMan(new ChessLocation(row, col));
-                var moves = chessMan.getMoves(this.board);
+                var moves = chessMan.getMoves(that.board);
                 if (that.info.turn != chessMan.color)
                     return false;
                 moves.every(function (obj) {
@@ -207,7 +207,10 @@ ChessBoard.prototype = {
     },
 
     getChessMan: function (location) {
-        return this.board[location.row][location.col];
+        if (location.row >= 0 && location.row < 8)
+            if (location.col >= 0 && location.col < 8)
+                return this.board[location.row][location.col];
+        return null;
     },
 
     /*
@@ -310,13 +313,42 @@ function ChessManPawn(location, color) {
 ChessManPawn.prototype = new ChessMan();
 
 ChessManPawn.prototype.getMoves = function (board) {
-    return [
-        {
-            row: this.location.row + 1,
-            col: this.location.col,
-            status: false
+    var moves = [];
+    var row, col, chessMan;
+    if (this.color == "black") {
+        if (board.blackField == "bottom") {
+            row = this.location.row + 1;
+            col = this.location.col;
+        } else {
+            row = this.location.row - 1;
+            col = this.location.col;
         }
-    ]
+        chessMan = board.getChessMan(new ChessLocation(row, col));
+        if (chessMan != null && chessMan._chessManUnicode == "") {
+            moves.push({
+                row: row,
+                col: col,
+                status: false
+            });
+        }
+    } else {
+        if (board.whiteField == "bottom") {
+            row = this.location.row + 1;
+            col = this.location.col;
+        } else {
+            row = this.location.row - 1;
+            col = this.location.col;
+        }
+        chessMan = board.getChessMan(new ChessLocation(row, col));
+        if (chessMan != null && chessMan._chessManUnicode == "") {
+            moves.push({
+                row: row,
+                col: col,
+                status: false
+            });
+        }
+    }
+    return moves;
 };
 
 function ChessManRook(locaton, color) {
