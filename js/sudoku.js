@@ -12,9 +12,9 @@ Sudoku.prototype = {
 
     _onCellMouseOver: function (cell) {
         var that = this;
-        var value = cell.value;
 
         return function () {
+            var value = cell.value;
             that.cells.forEach(function (cell) {
                 if (value != "" && cell.value == value) {
                     cell.highlight();
@@ -25,9 +25,9 @@ Sudoku.prototype = {
 
     _onCellMouseOut: function (cell) {
         var that = this;
-        var value = cell.value;
 
         return function () {
+            var value = cell.value;
             that.cells.forEach(function (cell) {
                 if (value != "" && cell.value == value) {
                     cell.noHighlight();
