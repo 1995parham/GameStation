@@ -54,10 +54,28 @@ ChessInfo.prototype = {
     }
 };
 
-function ChessEngine(info, board, inventory) {
+function ChessNotification() {
+    this.message = null;
+}
+
+ChessNotification.prototype = {
+    getNotificaitonBlock: function () {
+        var top = document.createElement("div");
+        this.message = document.createElement("emp");
+        top.appendChild(this.message);
+        return top;
+    },
+
+    setNotificationMessage: function (message) {
+        this.message.innerHTML = message;
+    }
+};
+
+function ChessEngine(info, board, inventory, notification) {
     this.board = board;
     this.info = info;
     this.inventory = inventory;
+    this.notification = notification;
 
     board.onChessManEvent("ondragstart", this._onChessManDrag());
     board.onChessManEvent("ondrop", this._onChessManDrop());
@@ -135,6 +153,7 @@ ChessEngine.prototype = {
         var that = this;
         return function (row, col) {
             return function (event) {
+                console.log("on drop event");
                 event.preventDefault();
 
                 var location = JSON.parse(event.dataTransfer.getData("ChessLocation"));
@@ -166,7 +185,8 @@ ChessEngine.prototype = {
                 }
 
                 if (that.isCheck((chessManSrc.color == "black") ? "white" : "black"))
-                    window.alert(((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
+                    that.notification.setNotificationMessage(
+                        ((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
 
                 that.chessManDie(chessManDst);
 
@@ -263,6 +283,8 @@ ChessBoard.prototype = {
         this.board[location.row][location.col] = chessMan;
         this.boardTrs[location.row].replaceChild(chessMan.getChessManTd(),
             this.boardTrs[location.row].childNodes[location.col]);
+        for (var ev in this.handler)
+            this.boardTrs[location.row].childNodes[location.col][ev] = this.handler[ev](location.row, location.col);
     },
 
     getChessMan: function (location) {
@@ -1164,10 +1186,13 @@ function chessLoadXML(xml) {
 
     var inventory = new ChessInventory();
 
+    var notification = new ChessNotification();
+
     top.appendChild(info.getInfoBlock());
     top.appendChild(inventory.getInventoryWhiteBlock());
     top.appendChild(board.getBoardTable());
     top.appendChild(inventory.getInventoryBlackBlock());
+    top.appendChild(notification.getNotificaitonBlock());
 
     /* update main contents of page */
     document.getElementById("main-container").innerHTML = "";
@@ -1304,5 +1329,5 @@ function chessLoadXML(xml) {
     }
 
     /* Game Engine :? */
-    new ChessEngine(info, board, inventory);
+    new ChessEngine(info, board, inventory, notification);
 }
