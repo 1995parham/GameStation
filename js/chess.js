@@ -140,8 +140,8 @@ ChessEngine.prototype = {
                 var location = JSON.parse(event.dataTransfer.getData("ChessLocation"));
                 var moves = JSON.parse(event.dataTransfer.getData("Moves"));
 
-                var chessMan = that.board.getChessMan(location);
-                chessMan.resetStyle();
+                var chessManSrc = that.board.getChessMan(location);
+                chessManSrc.resetStyle();
 
                 moves.forEach(function (obj) {
                     that.board.getChessMan(new ChessLocation(obj.row, obj.col)).resetStyle();
@@ -152,15 +152,25 @@ ChessEngine.prototype = {
                     }))
                     return false;
 
-                chessMan.location = new ChessLocation(row, col);
-                that.chessManDie(that.board.getChessMan(chessMan.location));
+                var chessManDst = that.board.getChessMan(new ChessLocation(row, col));
+
+                chessManSrc.location = new ChessLocation(row, col);
                 that.board.removeChessMan(new ChessLocation(location.row, location.col));
-                that.board.putChessMan(chessMan);
+                that.board.putChessMan(chessManSrc);
 
-                if (that.isCheck((chessMan.color == "black") ? "white" : "black"))
-                    window.alert(((chessMan.color == "black") ? "white" : "black") + " is in check :(");
+                if (that.isCheck(chessManSrc.color)) {
+                    chessManSrc.location = new ChessLocation(location.row, location.col);
+                    that.board.putChessMan(chessManSrc);
+                    that.board.putChessMan(chessManDst);
+                    return false;
+                }
 
-                that.info.setTurn(chessMan.color == "white" ? "black" : "white");
+                if (that.isCheck((chessManSrc.color == "black") ? "white" : "black"))
+                    window.alert(((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
+
+                that.chessManDie(chessManDst);
+
+                that.info.setTurn(chessManSrc.color == "white" ? "black" : "white");
             };
         };
     },
