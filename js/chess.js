@@ -191,6 +191,13 @@ ChessEngine.prototype = {
                 chessManSrc.counter++;
 
                 that.info.setTurn(chessManSrc.color == "white" ? "black" : "white");
+
+                that.board.getChessMan(new ChessLocation(location.row, location.col)).highlightSrcDst();
+                that.board.getChessMan(new ChessLocation(row, col)).highlightSrcDst();
+                window.setTimeout(function () {
+                    that.board.getChessMan(new ChessLocation(location.row, location.col)).resetStyle();
+                    that.board.getChessMan(new ChessLocation(row, col)).resetStyle();
+                }, 500);
             };
         };
     },
@@ -348,7 +355,7 @@ ChessMan.prototype = {
 
     highlightSelect: function () {
         if (this.td != null)
-            this.td.style.color = "orange";
+            this.td.style.color = "#FC8710";
     },
 
     highlightTarget: function () {
@@ -359,6 +366,11 @@ ChessMan.prototype = {
     highlightMove: function () {
         if (this.td != null)
             this.td.innerHTML = "&#128936;";
+    },
+
+    highlightSrcDst: function () {
+        if (this.td != null)
+                this.td.style.backgroundColor = "#6A6A6A";
     },
 
     resetStyle: function () {
