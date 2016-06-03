@@ -36,6 +36,41 @@ Sudoku.prototype = {
         };
     },
 
+    check: function () {
+        var i, j;
+        for (i = 0; i < 9; i++) {
+            var row = {};
+            for (j = 0; j < 9; j++) {
+                if (this.cells[i * 9 + j].value == "")
+                    continue;
+                if (row[this.cells[i * 9 + j].value] == true) {
+                    document.getElementById("error-row-sudoku").innerHTML = i;
+                    document.getElementById("error-col-sudoku").innerHTML = j;
+                    document.getElementById("error-dsp-sudoku").innerHTML = "Duplicate digit in row";
+                    return;
+                }
+                row[this.cells[i * 9 + j].value] = true;
+            }
+        }
+        for (j = 0; j < 9; j++) {
+            var col = {};
+            for (i = 0; i < 9; i++) {
+                if (this.cells[i * 9 + j].value == "")
+                    continue;
+                if (col[this.cells[i * 9 + j].value] == true) {
+                    document.getElementById("error-row-sudoku").innerHTML = i;
+                    document.getElementById("error-col-sudoku").innerHTML = j;
+                    document.getElementById("error-dsp-sudoku").innerHTML = "Duplicate digit in column";
+                    return;
+                }
+                col[this.cells[i * 9 + j].value] = true;
+            }
+        }
+        document.getElementById("error-row-sudoku").innerHTML = "-";
+        document.getElementById("error-col-sudoku").innerHTML = "-";
+        document.getElementById("error-dsp-sudoku").innerHTML = "-";
+    },
+
     submit: function () {
         var xml = (new DOMParser()).parseFromString('<?xml version="1.0" encoding="utf-8"?><solution></solution>', "text/xml");
 
@@ -140,7 +175,9 @@ function sudokuLoadXML(xml) {
 
     /* setup sudoku bottoms */
     document.getElementById("submit-sudoku").onclick = function () {
-        sudoku.submit()
+        sudoku.submit();
     };
-
+    document.getElementById("check-sudoku").onclick = function () {
+        sudoku.check();
+    };
 }
