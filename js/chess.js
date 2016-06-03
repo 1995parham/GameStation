@@ -70,11 +70,22 @@ ChessEngine.prototype = {
         return function (row, col) {
             return function (event) {
                 var chessMan = that.board.getChessMan(new ChessLocation(row, col));
+                var moves = chessMan.getMoves(this.board);
                 if (that.info.turn != chessMan.color)
                     return false;
+                moves.every(function (obj) {
+                    var row = obj.row;
+                    var col = obj.col;
+
+                    if (obj.status) {
+                        that.board.getChessMan(new ChessLocation(row, col)).highlightTarget();
+                    } else {
+                        that.board.getChessMan(new ChessLocation(row, col)).highlightMove();
+                    }
+                });
                 event.dataTransfer.setData("ChessLocation", JSON.stringify(new ChessLocation(row, col)));
-                event.dataTransfer.setData("Moves", JSON.stringify(chessMan.getMoves(that.board)));
-                chessMan.highlight();
+                event.dataTransfer.setData("Moves", JSON.stringify(moves));
+                chessMan.highlightSelect();
             };
         };
     },
@@ -89,11 +100,12 @@ ChessEngine.prototype = {
                 var moves = JSON.parse(event.dataTransfer.getData("Moves"));
 
                 var chessMan = that.board.getChessMan(location);
-                chessMan.noHighlight();
+                chessMan.resetStyle();
 
-                if (moves.findIndex(function (obj) {
-                        return (obj.row == row && obj.col == col);
-                    }) == -1)
+                if (moves.every(function (obj) {
+                        that.board.getChessMan(new ChessLocation(obj.row, obj.col)).resetStyle();
+                        return (obj.row != row || obj.col != col);
+                    }))
                     return false;
 
 
@@ -249,14 +261,30 @@ ChessMan.prototype = {
         return this.td;
     },
 
-    highlight: function () {
+    highlightSelect: function () {
         if (this.td != null)
             this.td.style.color = "orange";
     },
 
-    noHighlight: function () {
+    highlightTarget: function () {
         if (this.td != null)
+            this.td.style.color = "red";
+    },
+
+    highlightMove: function () {
+        if (this.td != null)
+            this.td.innerHTML = "&#128936;";
+    },
+
+    resetStyle: function () {
+        if (this.td != null) {
             this.td.style.color = this.color;
+            this.td.innerHTML = this._chessManUnicode;
+            if ((this.location.row + this.location.col) % 2 == 0)
+                this.td.style.backgroundColor = this._whiteBackgroundColor;
+            else
+                this.td.style.backgroundColor = this._blackBackgroundColor;
+        }
     },
 
     /*
