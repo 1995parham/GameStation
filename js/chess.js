@@ -516,6 +516,152 @@ function ChessManKnight(location, color) {
 
 ChessManKnight.prototype = new ChessMan();
 
+ChessManKnight.prototype.getMoves = function (board) {
+    var moves = [];
+    var row = this.location.row;
+    var col = this.location.col;
+    var chessMan;
+
+    chessMan = board.getChessMan(new ChessLocation(row + 2, col + 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 2,
+            col: col + 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 2,
+            col: col + 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row + 2, col - 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 2,
+            col: col - 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 2,
+            col: col - 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 2, col + 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 2,
+            col: col + 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 2,
+            col: col + 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 2, col - 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 2,
+            col: col - 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 2,
+            col: col - 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row + 1, col + 2));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 1,
+            col: col + 2,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 1,
+            col: col + 2,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row + 1, col - 2));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 1,
+            col: col - 2,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 1,
+            col: col - 2,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 1, col + 2));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 1,
+            col: col + 2,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 1,
+            col: col + 2,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 1, col - 2));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 1,
+            col: col - 2,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 1,
+            col: col - 2,
+            status: true
+        });
+    }
+
+    return moves;
+
+};
+
 function ChessManQueen(location, color) {
     ChessMan.call(this, location);
     this.color = color;
@@ -714,6 +860,10 @@ function ChessManKing(location, color) {
 }
 
 ChessManKing.prototype = new ChessMan();
+
+ChessManKing.prototype.getMoves = function (board) {
+
+};
 
 function ChessManBishop(location, color) {
     ChessMan.call(this, location);
