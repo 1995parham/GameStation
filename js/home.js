@@ -36,7 +36,7 @@ Game.prototype = {
         top.appendChild(par);
 
         if (this.active)
-            top.onmousedown = this._onBlockClick();
+            top.onmousedown = this._onGameClick();
 
         return top;
     },
@@ -57,6 +57,9 @@ Game.prototype = {
         item.onmouseout = this._onItemMouseOut();
         item.style.backgroundColor = this._itemColor;
 
+        if (this.active)
+            item.onmousedown = this._onGameClick();
+
         return item;
     },
 
@@ -64,7 +67,7 @@ Game.prototype = {
         return this.name + " Game with " + this.onlines + " online players";
     },
 
-    _onBlockClick: function () {
+    _onGameClick: function () {
         var that = this;
         return function () {
             document.getElementById("pwd").innerHTML = that.name;
@@ -140,13 +143,17 @@ function homeLoadXML(xml) {
 
     document.getElementById("games").children[0].style.backgroundColor =
         xml.getElementsByTagName("gameicon")[0].getAttribute("color");
-    document.getElementById("games").children[0].onmouseover = function () {
-        this.style.backgroundColor =
+    document.getElementById("games").onmouseover = function () {
+        this.children[0].style.backgroundColor =
             xml.getElementsByTagName("gameicon")[0].getAttribute("hover");
+        for (var i = 0; i < this.children.length; i++)
+            this.children[i].style.display = "inline-block";
     };
-    document.getElementById("games").children[0].onmouseout = function () {
-        this.style.backgroundColor =
+    document.getElementById("games").onmouseout = function () {
+        this.children[0].style.backgroundColor =
             xml.getElementsByTagName("gameicon")[0].getAttribute("color");
+        for (var i = 1; i < this.children.length; i++)
+            this.children[i].style.display = "none";
     };
 
     /* initiate games static fields */
