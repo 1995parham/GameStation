@@ -93,7 +93,7 @@ ChessEngine.prototype = {
                 if (that.info.turn != chessMan.color)
                     return false;
                 var moves = chessMan.getMoves(that.board);
-                moves.every(function (obj) {
+                moves.forEach(function (obj) {
                     var row = obj.row;
                     var col = obj.col;
 
@@ -102,7 +102,6 @@ ChessEngine.prototype = {
                     } else {
                         that.board.getChessMan(new ChessLocation(row, col)).highlightMove();
                     }
-                    return true;
                 });
                 event.dataTransfer.setData("ChessLocation", JSON.stringify(new ChessLocation(row, col)));
                 event.dataTransfer.setData("Moves", JSON.stringify(moves));
@@ -122,9 +121,12 @@ ChessEngine.prototype = {
 
                 var chessMan = that.board.getChessMan(location);
                 chessMan.resetStyle();
+               
+                moves.forEach(function (obj) {
+                    that.board.getChessMan(new ChessLocation(obj.row, obj.col)).resetStyle();
+                });
 
                 if (moves.every(function (obj) {
-                        that.board.getChessMan(new ChessLocation(obj.row, obj.col)).resetStyle();
                         return (obj.row != row || obj.col != col);
                     }))
                     return false;
