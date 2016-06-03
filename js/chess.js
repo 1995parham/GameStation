@@ -90,18 +90,20 @@ ChessEngine.prototype = {
         return function (row, col) {
             return function (event) {
                 var chessMan = that.board.getChessMan(new ChessLocation(row, col));
-                var moves = chessMan.getMoves(that.board);
                 if (that.info.turn != chessMan.color)
                     return false;
+                var moves = chessMan.getMoves(that.board);
                 moves.every(function (obj) {
                     var row = obj.row;
                     var col = obj.col;
 
                     if (obj.status) {
+                        console.log("Target :)");
                         that.board.getChessMan(new ChessLocation(row, col)).highlightTarget();
                     } else {
                         that.board.getChessMan(new ChessLocation(row, col)).highlightMove();
                     }
+                    return true;
                 });
                 event.dataTransfer.setData("ChessLocation", JSON.stringify(new ChessLocation(row, col)));
                 event.dataTransfer.setData("Moves", JSON.stringify(moves));
