@@ -85,6 +85,14 @@ ChessEngine.prototype = {
             this.info.setBlackScore(score);
     },
 
+    isWhiteInCheck: function () {
+
+    },
+
+    isBlackInCheck: function () {
+
+    },
+
     _onChessManDrag: function () {
         var that = this;
         return function (row, col) {
