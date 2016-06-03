@@ -41,7 +41,7 @@ Sudoku.prototype = {
         var cells = xml.createElement("cells");
         for (var i = 0; i < this.cells.length; i++) {
             var cell = xml.createElement("cell");
-            cell.setAttribute("postval", Math.floor(i / 9) * 100 + (i % 9) * 10 + parseInt(this.cells[i].value));
+            cell.setAttribute("posval", Math.floor(i / 9) * 100 + (i % 9) * 10 + parseInt(this.cells[i].value));
             cell.appendChild(xml.createTextNode(this.cells[i].value));
             cells.appendChild(cell);
         }
@@ -52,7 +52,7 @@ Sudoku.prototype = {
 
         xml.getElementsByTagName("solution")[0].appendChild(cells);
         xml.getElementsByTagName("solution")[0].appendChild(student);
-        
+
         var request = new XMLHttpRequest();
         request.open("POST", "http://ie.ce-it.ir/hw3/sudoku_validator.php", true);
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
