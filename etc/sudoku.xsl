@@ -25,6 +25,17 @@
         </div>
         <div id="check-sudoku">Check it out!</div>
         <div id="submit-sudoku">Submit</div>
+        <hr style="margin: 20px 0;" />
+        <div>
+            <span>Error Row: </span>
+            <span id="error-row-sudoku">-</span>
+            <br/>
+            <span>Error Column: </span>
+            <span id="error-col-sudoku">-</span>
+            <br/>
+            <span>Error: </span>
+            <span id="error-dsp-sudoku">-</span>
+        </div>
     </xsl:template>
 
 </xsl:stylesheet>
