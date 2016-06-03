@@ -153,7 +153,6 @@ ChessEngine.prototype = {
         var that = this;
         return function (row, col) {
             return function (event) {
-                console.log("on drop event");
                 event.preventDefault();
 
                 var location = JSON.parse(event.dataTransfer.getData("ChessLocation"));
