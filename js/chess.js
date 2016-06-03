@@ -862,7 +862,148 @@ function ChessManKing(location, color) {
 ChessManKing.prototype = new ChessMan();
 
 ChessManKing.prototype.getMoves = function (board) {
+    var moves = [];
+    var row = this.location.row;
+    var col = this.location.col;
+    var chessMan;
 
+    chessMan = board.getChessMan(new ChessLocation(row, col + 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row,
+            col: col + 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row,
+            col: col + 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row, col - 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row,
+            col: col - 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row,
+            col: col - 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 1, col + 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 1,
+            col: col + 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 1,
+            col: col + 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 1, col - 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 1,
+            col: col - 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 1,
+            col: col - 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row + 1, col + 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 1,
+            col: col + 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 1,
+            col: col + 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row + 1, col - 1));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 1,
+            col: col - 1,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 1,
+            col: col - 1,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row - 1, col));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row - 1,
+            col: col,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row - 1,
+            col: col,
+            status: true
+        });
+    }
+
+    chessMan = board.getChessMan(new ChessLocation(row + 1, col));
+    if (chessMan == null) {
+    } else if (chessMan._chessManUnicode == "") {
+        moves.push({
+            row: row + 1,
+            col: col,
+            status: false
+        });
+    } else if (chessMan.color == this.color) {
+    } else if (chessMan.color != this.color) {
+        moves.push({
+            row: row + 1,
+            col: col,
+            status: true
+        });
+    }
+
+    return moves;
 };
 
 function ChessManBishop(location, color) {
