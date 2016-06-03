@@ -1,6 +1,6 @@
 function ChessInfo(white, black, turn) {
-    this.white = white;
-    this.black = black;
+    this.white = parseInt(white);
+    this.black = parseInt(black);
     this.turn = turn;
 
     this.blackSpan = document.createElement("span");
@@ -38,13 +38,13 @@ ChessInfo.prototype = {
     },
 
     setWhiteScore: function (white) {
-        this.white = white;
-        this.whiteSpan.innerHTML = white;
+        this.white += white;
+        this.whiteSpan.innerHTML = this.white;
     },
 
     setBlackScore: function (black) {
-        this.black = black;
-        this.blackSpan.innerHTML = black;
+        this.black += black;
+        this.blackSpan.innerHTML = this.black;
     },
 
     setTurn: function (turn) {
@@ -65,6 +65,26 @@ function ChessEngine(info, board, inventory) {
 }
 
 ChessEngine.prototype = {
+
+    chessManDie: function (chessMan) {
+        if (chessMan._chessManUnicode == "")
+            return;
+        this.inventory.putChessMan(chessMan);
+        var score = 0;
+        if (chessMan instanceof ChessManPawn)
+            score = 1;
+        else if (chessMan instanceof ChessManKnight || chessMan instanceof ChessManBishop)
+            score = 3;
+        else if (chessMan instanceof ChessManRook)
+            score = 5;
+        else if (chessMan instanceof ChessManQueen)
+            score = 9;
+        if (chessMan.color = "black")
+            this.info.setWhiteScore(score);
+        else
+            this.info.setBlackScore(score);
+    },
+
     _onChessManDrag: function () {
         var that = this;
         return function (row, col) {
@@ -108,8 +128,8 @@ ChessEngine.prototype = {
                     }))
                     return false;
 
-
                 chessMan.location = new ChessLocation(row, col);
+                that.chessManDie(that.board.getChessMan(chessMan.location));
                 that.board.removeChessMan(new ChessLocation(location.row, location.col));
                 that.board.putChessMan(chessMan);
 
@@ -331,6 +351,22 @@ ChessManPawn.prototype.getMoves = function (board) {
                 status: false
             });
         }
+        chessMan = board.getChessMan(new ChessLocation(row, col - 1));
+        if (chessMan != null && chessMan.color == "white") {
+            moves.push({
+                row: row,
+                col: col - 1,
+                status: true
+            });
+        }
+        chessMan = board.getChessMan(new ChessLocation(row, col + 1));
+        if (chessMan != null && chessMan.color == "white") {
+            moves.push({
+                row: row,
+                col: col + 1,
+                status: true
+            });
+        }
     } else {
         if (board.whiteField == "bottom") {
             row = this.location.row + 1;
@@ -345,6 +381,22 @@ ChessManPawn.prototype.getMoves = function (board) {
                 row: row,
                 col: col,
                 status: false
+            });
+        }
+        chessMan = board.getChessMan(new ChessLocation(row, col - 1));
+        if (chessMan != null && chessMan.color == "black") {
+            moves.push({
+                row: row,
+                col: col - 1,
+                status: true
+            });
+        }
+        chessMan = board.getChessMan(new ChessLocation(row, col + 1));
+        if (chessMan != null && chessMan.color == "black") {
+            moves.push({
+                row: row,
+                col: col + 1,
+                status: true
             });
         }
     }
