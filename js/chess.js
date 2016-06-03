@@ -189,6 +189,7 @@ ChessEngine.prototype = {
                         ((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
 
                 that.chessManDie(chessManDst);
+                chessManSrc.counter++;
 
                 that.info.setTurn(chessManSrc.color == "white" ? "black" : "white");
             };
@@ -320,6 +321,7 @@ function ChessMan(location) {
     this.td = null;
     this.span = null;
     this.location = location;
+    this.counter = 0;
 }
 
 ChessMan.prototype = {
