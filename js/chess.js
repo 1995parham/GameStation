@@ -194,6 +194,7 @@ ChessEngine.prototype = {
                 chessManSrc.counter++;
 
                 that.info.setTurn(chessManSrc.color == "white" ? "black" : "white");
+                that.board.rotate(chessManSrc.color);
 
                 that.board.getChessMan(new ChessLocation(location.row, location.col)).highlightSrcDst();
                 that.board.getChessMan(new ChessLocation(row, col)).highlightSrcDst();
@@ -220,7 +221,7 @@ function ChessInventory() {
 
     this.whiteInventoryDiv = document.createElement("div");
     this.whiteInventoryDiv.id = "white-chessman-panel";
-    this.whiteInventoryDiv.style.wordWrap = "break-word"
+    this.whiteInventoryDiv.style.wordWrap = "break-word";
 
     this.blackInventory = [];
 
@@ -256,6 +257,7 @@ function ChessBoard(whiteField, blackField) {
     this.handler = {};
 
     this.board = [];
+    this.boardTable = null;
     this.boardTrs = [];
     for (var i = 0; i < 8; i++) {
         var row = [];
@@ -272,11 +274,26 @@ function ChessBoard(whiteField, blackField) {
 
 ChessBoard.prototype = {
     getBoardTable: function () {
-        var top = document.createElement("table");
+        this.boardTable = document.createElement("table");
         for (var i = 0; i < 8; i++) {
-            top.appendChild(this.boardTrs[i]);
+            this.boardTable.appendChild(this.boardTrs[i]);
         }
-        return top;
+        return this.boardTable;
+    },
+
+    rotate: function (direction) {
+        this.boardTable.innerHTML = "";
+        var i;
+        if (direction == "white") {
+            for (i = 0; i < 8; i++) {
+                this.boardTable.appendChild(this.boardTrs[i]);
+            }
+        } else {
+            for (i = 7; i >= 0; i--) {
+                this.boardTable.appendChild(this.boardTrs[i]);
+            }
+        }
+        return this.boardTable;
     },
 
     putChessMan: function (chessMan) {
