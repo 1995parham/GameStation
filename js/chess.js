@@ -134,6 +134,30 @@ ChessEngine.prototype = {
     },
 
     isCheckMate: function (color) {
+        var chessManSrc;
+        var that = this;
+        for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
+                chessManSrc = that.board.getChessMan(new ChessLocation(i, j));
+                if (chessManSrc.color != color)
+                    continue;
+                var location = chessManSrc.location;
+                if (!chessManSrc.getMoves(that.board).every(function (move) {
+                        var result = false;
+                        var chessManDst = that.board.getChessMan(new ChessLocation(move.row, move.col));
+                        chessManSrc.location = new ChessLocation(move.row, move.col);
+                        that.board.removeChessMan(new ChessLocation(location.row, location.col));
+                        that.board.putChessMan(chessManSrc);
+                        if (that.isCheck(chessManSrc.color))
+                            result = true;
+                        chessManSrc.location = new ChessLocation(location.row, location.col);
+                        that.board.putChessMan(chessManSrc);
+                        that.board.putChessMan(chessManDst);
+                        return result;
+                    }))
+                    return false;
+            }
+        }
         return true;
     },
 
@@ -220,7 +244,6 @@ ChessEngine.prototype = {
                 chessManSrc.location = new ChessLocation(row, col);
                 that.board.removeChessMan(new ChessLocation(location.row, location.col));
                 that.board.putChessMan(chessManSrc);
-                console.log(chessManSrc);
 
                 if (that.isCheck(chessManSrc.color)) {
                     chessManSrc.location = new ChessLocation(location.row, location.col);
@@ -235,7 +258,7 @@ ChessEngine.prototype = {
                 if (that.isCheck((chessManSrc.color == "black") ? "white" : "black")) {
                     that.notification.setNotificationMessage(
                         ((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
-                    if (that.isCheckMate((chessManSrc.color = "black") ? "white" : "black")) {
+                    if (that.isCheckMate((chessManSrc.color == "black") ? "white" : "black")) {
                         that.notification.setNotificationMessage(chessManSrc.color + " win the game");
                         end = true;
                     }
