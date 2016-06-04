@@ -187,6 +187,13 @@ ChessEngine.prototype = {
 
                     return true;
                 }
+                
+                if (castlingRook != null) {
+                    var king = that.board.getChessMan(new ChessLocation(row, col));
+                    if (!(king instanceof ChessManKing))
+                        return false
+                }
+                
                 if (lastLocation != null) {
                     that.board.getChessMan(lastLocation).resetStyle();
 
