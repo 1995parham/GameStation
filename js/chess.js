@@ -170,7 +170,12 @@ ChessEngine.prototype = {
             return function () {
                 if (lastLocation != null) {
                     that.board.getChessMan(lastLocation).resetStyle();
+
                     lastLocation = null;
+                    castlingRook = null;
+
+                    that.notification.setNotificationMessage("");
+
                     return false;
                 }
 
@@ -180,9 +185,11 @@ ChessEngine.prototype = {
                     return false;
 
                 if (chessMan instanceof ChessManPawn && (chessMan.location.row == 7 || chessMan.location == 0)) {
+                    that.notification.setNotificationMessage("Select one of your died chess mans for promotion");
                     lastLocation = new ChessLocation(row, col);
                     chessMan.highlightSelect();
                 } else if (chessMan instanceof ChessManRook && chessMan.counter == 0) {
+                    that.notification.setNotificationMessage("Select your king to castling or click anywhere");
                     castlingRook = chessMan;
                     lastLocation = new ChessLocation(row, col);
                     chessMan.highlightSelect();
