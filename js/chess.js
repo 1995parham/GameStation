@@ -51,6 +51,14 @@ ChessInfo.prototype = {
         this.turn = turn;
         this.turnDiv.innerHTML = turn;
         this.turnDiv.className = turn;
+    },
+
+    gameEnded: function () {
+        this.turn = "";
+        this.turnDiv.innerHTML = "game over";
+        this.turnDiv.className = "";
+        this.turnDiv.style.backgroundColor = "#FF6600";
+        this.turnDiv.style.color = "white";
     }
 };
 
@@ -124,6 +132,10 @@ ChessEngine.prototype = {
         return false;
     },
 
+    isCheckMate: function (color) {
+        return true;
+    },
+
     _onChessManDrag: function () {
         var that = this;
         return function (row, col) {
@@ -175,6 +187,7 @@ ChessEngine.prototype = {
                 chessManSrc.location = new ChessLocation(row, col);
                 that.board.removeChessMan(new ChessLocation(location.row, location.col));
                 that.board.putChessMan(chessManSrc);
+                console.log(chessManSrc);
 
                 if (that.isCheck(chessManSrc.color)) {
                     chessManSrc.location = new ChessLocation(location.row, location.col);
@@ -184,16 +197,26 @@ ChessEngine.prototype = {
                     return false;
                 }
 
-                if (that.isCheck((chessManSrc.color == "black") ? "white" : "black"))
+                var end = false;
+
+                if (that.isCheck((chessManSrc.color == "black") ? "white" : "black")) {
                     that.notification.setNotificationMessage(
                         ((chessManSrc.color == "black") ? "white" : "black") + " is in check :(");
-                else
+                    if (that.isCheckMate((chessManSrc.color = "black") ? "white" : "black")) {
+                        that.notification.setNotificationMessage(chessManSrc.color + " win the game");
+                        end = true;
+                    }
+                } else {
                     that.notification.setNotificationMessage("");
+                }
 
                 that.chessManDie(chessManDst);
                 chessManSrc.counter++;
 
-                that.info.setTurn(chessManSrc.color == "white" ? "black" : "white");
+                if (!end)
+                    that.info.setTurn(chessManSrc.color == "white" ? "black" : "white");
+                else
+                    that.info.gameEnded();
                 that.board.rotate(chessManSrc.color);
 
                 that.board.getChessMan(new ChessLocation(location.row, location.col)).highlightSrcDst();
