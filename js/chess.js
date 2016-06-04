@@ -325,6 +325,20 @@ ChessInventory.prototype = {
         return this.blackInventoryDiv;
     },
 
+    swapChessMan: function (index, chessManNew) {
+        var chessManOld;
+        if (chessManNew.color == "white") {
+            chessManOld = this.whiteInventory[index];
+            this.whiteInventory[index] = chessManNew;
+            this.whiteInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.whiteInventoryDiv.children[index]);
+        } else {
+            chessManOld = this.blackInventory[index];
+            this.blackInventory[index] = chessManNew;
+            this.blackInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.blackInventoryDiv.children[index]);
+        }
+        return chessManOld;
+    },
+
     putChessMan: function (chessMan) {
         if (chessMan.color == "white") {
             this.whiteInventory.push(chessMan);
