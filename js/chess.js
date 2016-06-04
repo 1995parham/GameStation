@@ -314,6 +314,8 @@ function ChessInventory() {
     this.blackInventoryDiv = document.createElement("div");
     this.blackInventoryDiv.id = "black-chessman-panel";
     this.blackInventoryDiv.style.wordWrap = "break-word"
+
+    this.handler = {};
 }
 
 ChessInventory.prototype = {
@@ -325,16 +327,30 @@ ChessInventory.prototype = {
         return this.blackInventoryDiv;
     },
 
+    onChessManEvent: function (event, fn) {
+        var i;
+        for (i = 0; i < this.whiteInventoryDiv.childNodes.length; i++)
+            this.whiteInventoryDiv.childNodes[i][event] = fn(i);
+        for (i = 0; i < this.blackInventoryDiv.childNodes.length; i++)
+            this.blackInventoryDiv.childNodes[i][event] = fn(i);
+        this.handler[event] = fn;
+    },
+
     swapChessMan: function (index, chessManNew) {
         var chessManOld;
+        var ev;
         if (chessManNew.color == "white") {
             chessManOld = this.whiteInventory[index];
             this.whiteInventory[index] = chessManNew;
-            this.whiteInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.whiteInventoryDiv.children[index]);
+            this.whiteInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.whiteInventoryDiv.childNodes[index]);
+            for (ev in this.handler)
+                this.whiteInventoryDiv.childNodes[index][ev] = this.handler[ev](index);
         } else {
             chessManOld = this.blackInventory[index];
             this.blackInventory[index] = chessManNew;
-            this.blackInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.blackInventoryDiv.children[index]);
+            this.blackInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.blackInventoryDiv.childNodes[index]);
+            for (ev in this.handler)
+                this.whiteInventoryDiv.childNodes[index][ev] = this.handler[ev](index);
         }
         return chessManOld;
     },
