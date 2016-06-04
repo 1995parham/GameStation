@@ -59,7 +59,7 @@ function ChessNotification() {
 }
 
 ChessNotification.prototype = {
-    getNotificaitonBlock: function () {
+    getNotificationBlock: function () {
         var top = document.createElement("div");
         this.message = document.createElement("emp");
         top.appendChild(this.message);
@@ -1225,7 +1225,7 @@ function chessLoadXML(xml) {
     top.appendChild(inventory.getInventoryWhiteBlock());
     top.appendChild(board.getBoardTable());
     top.appendChild(inventory.getInventoryBlackBlock());
-    top.appendChild(notification.getNotificaitonBlock());
+    top.appendChild(notification.getNotificationBlock());
 
     /* update main contents of page */
     document.getElementById("main-container").innerHTML = "";
