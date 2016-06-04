@@ -16,6 +16,8 @@ function ChessInfo(white, black, turn) {
 }
 
 ChessInfo.prototype = {
+    constructor: ChessInfo,
+
     getInfoBlock: function () {
         var top = document.createElement("div");
         top.id = "chess-info";
@@ -67,6 +69,8 @@ function ChessNotification() {
 }
 
 ChessNotification.prototype = {
+    constructor: ChessNotification,
+
     getNotificationBlock: function () {
         var top = document.createElement("div");
         this.message = document.createElement("emp");
@@ -94,6 +98,7 @@ function ChessEngine(info, board, inventory, notification) {
 }
 
 ChessEngine.prototype = {
+    constructor: ChessEngine,
 
     chessManDie: function (chessMan) {
         if (chessMan._chessManUnicode == "")
@@ -424,6 +429,8 @@ function ChessInventory() {
 }
 
 ChessInventory.prototype = {
+    constructor: ChessInventory,
+
     getInventoryWhiteBlock: function () {
         return this.whiteInventoryDiv;
     },
@@ -501,6 +508,8 @@ function ChessBoard(whiteField, blackField) {
 }
 
 ChessBoard.prototype = {
+    constructor: ChessBoard,
+
     getBoardTable: function () {
         this.boardTable = document.createElement("table");
         for (var i = 0; i < 8; i++) {
@@ -568,7 +577,9 @@ function ChessLocation(row, col) {
     this.col = col;
 }
 
-ChessLocation.prototype = {};
+ChessLocation.prototype = {
+    constructor: ChessLocation
+};
 
 function ChessMan(location) {
     this.color = "";
@@ -579,6 +590,7 @@ function ChessMan(location) {
 }
 
 ChessMan.prototype = {
+    constructor: ChessMan,
 
     getChessManSpan: function () {
         var data = document.createElement("span");
@@ -653,6 +665,8 @@ function ChessManPawn(location, color) {
 }
 
 ChessManPawn.prototype = new ChessMan();
+
+ChessManPawn.prototype.constructor = ChessManPawn;
 
 ChessManPawn.prototype.getMoves = function (board) {
     var moves = [];
@@ -731,6 +745,8 @@ function ChessManRook(locaton, color) {
 }
 
 ChessManRook.prototype = new ChessMan();
+
+ChessManRook.prototype.constructor = ChessManRook;
 
 ChessManRook.prototype.getMoves = function (board) {
     var row = this.location.row;
@@ -834,6 +850,8 @@ function ChessManKnight(location, color) {
 }
 
 ChessManKnight.prototype = new ChessMan();
+
+ChessManKnight.prototype.constructor = ChessManKnight;
 
 ChessManKnight.prototype.getMoves = function (board) {
     var moves = [];
@@ -987,6 +1005,8 @@ function ChessManQueen(location, color) {
 }
 
 ChessManQueen.prototype = new ChessMan();
+
+ChessManQueen.prototype.constructor = ChessManQueen;
 
 ChessManQueen.prototype.getMoves = function (board) {
     var moves = [];
@@ -1180,6 +1200,8 @@ function ChessManKing(location, color) {
 
 ChessManKing.prototype = new ChessMan();
 
+ChessManKing.prototype.constructor = ChessManKing;
+
 ChessManKing.prototype.getMoves = function (board) {
     var moves = [];
     var row = this.location.row;
@@ -1331,6 +1353,8 @@ function ChessManBishop(location, color) {
 }
 
 ChessManBishop.prototype = new ChessMan();
+
+ChessManBishop.prototype.constructor = ChessManBishop;
 
 ChessManBishop.prototype.getMoves = function (board) {
     var row = this.location.row;

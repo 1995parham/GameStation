@@ -3,6 +3,8 @@ function Sudoku() {
 }
 
 Sudoku.prototype = {
+    constructor: Sudoku,
+
     addCell: function (cell) {
         this.cells.push(cell);
 
@@ -110,6 +112,8 @@ function SudokuCell(value, element) {
 }
 
 SudokuCell.prototype = {
+    constructor: SudokuCell,
+
     highlight: function () {
         this.element.style.color = this._highlightColor;
         this.element.style.backgroundColor = this._highlightColorBackground;
