@@ -240,6 +240,18 @@ ChessEngine.prototype = {
                             return false;
                         }
                     }
+
+                    that.board.removeChessMan(king.location);
+                    king.location.col = low + 2;
+                    that.board.putChessMan(king);
+
+                    that.board.removeChessMan(castlingRook.location);
+                    castlingRook.col = high - 2;
+                    that.board.putChessMan(castlingRook);
+
+                    castlingRook = null;
+
+                    that.info.setTurn(king.color == "white" ? "black" : "white");
                 }
 
                 if (lastLocation != null) {
