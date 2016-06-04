@@ -88,8 +88,9 @@ function ChessEngine(info, board, inventory, notification) {
     board.onChessManEvent("ondragstart", this._onChessManDrag());
     board.onChessManEvent("ondrop", this._onChessManDrop());
     board.onChessManEvent("ondragover", this._onChessManDragOver());
-    board.onChessManEvent("onclick", this._onChessManClick());
-    inventory.onChessManEvent("onclick", this._onChessManClick());
+    var tmp = this._onChessManClick();
+    board.onChessManEvent("onclick", tmp);
+    inventory.onChessManEvent("onclick", tmp);
 }
 
 ChessEngine.prototype = {
@@ -107,7 +108,7 @@ ChessEngine.prototype = {
             score = 5;
         else if (chessMan instanceof ChessManQueen)
             score = 9;
-        if (chessMan.color = "black")
+        if (chessMan.color == "black")
             this.info.setWhiteScore(score);
         else
             this.info.setBlackScore(score);
@@ -173,10 +174,17 @@ ChessEngine.prototype = {
                 if (col == undefined) {
                     if (promotionPawn == null)
                         return;
+
                     var newChessMan = that.inventory.swapChessMan(row, promotionPawn);
                     newChessMan.location = new ChessLocation(promotionPawn.location.row, promotionPawn.location.col);
                     that.board.putChessMan(newChessMan);
+
                     promotionPawn = null;
+
+                    that.notification.setNotificationMessage("");
+
+                    that.info.setTurn(newChessMan.color == "white" ? "black" : "white");
+
                     return true;
                 }
                 if (lastLocation != null) {
@@ -362,18 +370,25 @@ ChessInventory.prototype = {
             this.blackInventory[index] = chessManNew;
             this.blackInventoryDiv.replaceChild(chessManNew.getChessManSpan(), this.blackInventoryDiv.childNodes[index]);
             for (ev in this.handler)
-                this.whiteInventoryDiv.childNodes[index][ev] = this.handler[ev](index);
+                this.blackInventoryDiv.childNodes[index][ev] = this.handler[ev](index);
         }
         return chessManOld;
     },
 
     putChessMan: function (chessMan) {
+        var ev, index;
         if (chessMan.color == "white") {
+            index = this.whiteInventoryDiv.childNodes.length;
             this.whiteInventory.push(chessMan);
             this.whiteInventoryDiv.appendChild(chessMan.getChessManSpan());
+            for (ev in this.handler)
+                this.whiteInventoryDiv.lastChild[ev] = this.handler[ev](index);
         } else {
+            index = this.blackInventoryDiv.childNodes.length;
             this.blackInventory.push(chessMan);
             this.blackInventoryDiv.appendChild(chessMan.getChessManSpan());
+            for (ev in this.handler)
+                this.blackInventoryDiv.lastChild[ev] = this.handler[ev](index);
         }
     }
 };
