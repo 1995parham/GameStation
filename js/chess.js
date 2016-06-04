@@ -313,7 +313,7 @@ function ChessInventory() {
 
     this.blackInventoryDiv = document.createElement("div");
     this.blackInventoryDiv.id = "black-chessman-panel";
-    this.blackInventoryDiv.style.wordWrap = "break-word"
+    this.blackInventoryDiv.style.wordWrap = "break-word";
 
     this.handler = {};
 }
