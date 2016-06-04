@@ -88,6 +88,7 @@ function ChessEngine(info, board, inventory, notification) {
     board.onChessManEvent("ondragstart", this._onChessManDrag());
     board.onChessManEvent("ondrop", this._onChessManDrop());
     board.onChessManEvent("ondragover", this._onChessManDragOver());
+    board.onChessManEvent("onclick", this._onChessManClick());
 }
 
 ChessEngine.prototype = {
@@ -134,6 +135,38 @@ ChessEngine.prototype = {
 
     isCheckMate: function (color) {
         return true;
+    },
+
+    _onChessManClick: function () {
+        var that = this;
+        var lastLocation = null;
+        var castlingRook = null;
+
+        return function (row, col) {
+            return function () {
+                if (lastLocation != null) {
+                    that.board.getChessMan(lastLocation).resetStyle();
+                    lastLocation = null;
+                    return false;
+                }
+
+                var chessMan = that.board.getChessMan(new ChessLocation(row, col));
+
+                if (that.info.turn != chessMan.color)
+                    return false;
+
+                if (chessMan instanceof ChessManPawn && (chessMan.location.row == 7 || chessMan.location == 0)) {
+                    lastLocation = new ChessLocation(row, col);
+                    chessMan.highlightSelect();
+                } else if (chessMan instanceof ChessManRook && chessMan.counter == 0) {
+                    castlingRook = chessMan;
+                    lastLocation = new ChessLocation(row, col);
+                    chessMan.highlightSelect();
+                } else {
+                    return false;
+                }
+            };
+        };
     },
 
     _onChessManDrag: function () {
