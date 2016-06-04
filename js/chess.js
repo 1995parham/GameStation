@@ -89,6 +89,7 @@ function ChessEngine(info, board, inventory, notification) {
     board.onChessManEvent("ondrop", this._onChessManDrop());
     board.onChessManEvent("ondragover", this._onChessManDragOver());
     board.onChessManEvent("onclick", this._onChessManClick());
+    inventory.onChessManEvent("onclick", this._onChessManClick());
 }
 
 ChessEngine.prototype = {
@@ -165,9 +166,19 @@ ChessEngine.prototype = {
         var that = this;
         var lastLocation = null;
         var castlingRook = null;
+        var promotionPawn = null;
 
         return function (row, col) {
             return function () {
+                if (col == undefined) {
+                    if (promotionPawn == null)
+                        return;
+                    var newChessMan = that.inventory.swapChessMan(row, promotionPawn);
+                    newChessMan.location = new ChessLocation(promotionPawn.location.row, promotionPawn.location.col);
+                    that.board.putChessMan(newChessMan);
+                    promotionPawn = null;
+                    return true;
+                }
                 if (lastLocation != null) {
                     that.board.getChessMan(lastLocation).resetStyle();
 
@@ -184,9 +195,10 @@ ChessEngine.prototype = {
                 if (that.info.turn != chessMan.color)
                     return false;
 
-                if (chessMan instanceof ChessManPawn && (chessMan.location.row == 7 || chessMan.location == 0)) {
+                if (chessMan instanceof ChessManPawn && (chessMan.location.row == 7 || chessMan.location.row == 0)) {
                     that.notification.setNotificationMessage("Select one of your died chess mans for promotion");
                     lastLocation = new ChessLocation(row, col);
+                    promotionPawn = chessMan;
                     chessMan.highlightSelect();
                 } else if (chessMan instanceof ChessManRook && chessMan.counter == 0) {
                     that.notification.setNotificationMessage("Select your king to castling or click anywhere");
