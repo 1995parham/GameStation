@@ -187,13 +187,61 @@ ChessEngine.prototype = {
 
                     return true;
                 }
-                
+
                 if (castlingRook != null) {
                     var king = that.board.getChessMan(new ChessLocation(row, col));
                     if (!(king instanceof ChessManKing))
+                        return false;
+                    if (king.counter == 0) {
+                        if (king.color == "black") {
+                            if (that.board.blackField == "bottom") {
+                                if (king.location.row != 0) {
+                                    castlingRook = null;
+                                    that.notification.setNotificationMessage("Castling was failed");
+                                    return false;
+                                }
+                            } else {
+                                if (king.location.row != 7) {
+                                    castlingRook = null;
+                                    that.notification.setNotificationMessage("Castling was failed");
+                                    return false;
+                                }
+                            }
+                        }
+                        if (king.color == "white") {
+                            if (that.board.whiteField == "bottom") {
+                                if (king.location.row != 0) {
+                                    castlingRook = null;
+                                    that.notification.setNotificationMessage("Castling was failed");
+                                    return false;
+                                }
+                            } else {
+                                if (king.location.row != 7) {
+                                    castlingRook = null;
+                                    that.notification.setNotificationMessage("Castling was failed");
+                                    return false;
+                                }
+                            }
+                        }
+                    } else {
+                        castlingRook = null;
+                        that.notification.setNotificationMessage("Castling was failed");
                         return false
+                    }
+
+                    var low, high;
+                    low = (castlingRook.location.col < king.location.col) ? castlingRook.location.col : king.location.col;
+                    high = (castlingRook.location.col > king.location.col) ? castlingRook.location.col : king.location.col;
+
+                    for (var i = low + 1; i < high; i++) {
+                        if (that.board.getChessMan(new ChessLocation(castlingRook.location.row, i))._chessManUnicode != "") {
+                            castlingRook = null;
+                            that.notification.setNotificationMessage("Castling was failed");
+                            return false;
+                        }
+                    }
                 }
-                
+
                 if (lastLocation != null) {
                     that.board.getChessMan(lastLocation).resetStyle();
 
@@ -216,6 +264,24 @@ ChessEngine.prototype = {
                     promotionPawn = chessMan;
                     chessMan.highlightSelect();
                 } else if (chessMan instanceof ChessManRook && chessMan.counter == 0) {
+                    if (chessMan.color == "black") {
+                        if (that.board.blackField == "bottom") {
+                            if (chessMan.location.row != 0)
+                                return false;
+                        } else {
+                            if (chessMan.location.row != 7)
+                                return false;
+                        }
+                    }
+                    if (chessMan.color == "white") {
+                        if (that.board.whiteField == "bottom") {
+                            if (chessMan.location.row != 0)
+                                return false;
+                        } else {
+                            if (chessMan.location.row != 7)
+                                return false;
+                        }
+                    }
                     that.notification.setNotificationMessage("Select your king to castling or click anywhere");
                     castlingRook = chessMan;
                     lastLocation = new ChessLocation(row, col);
