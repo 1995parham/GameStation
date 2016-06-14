@@ -123,7 +123,7 @@ function initiation() {
     };
 
     var request = new XMLHttpRequest();
-    request.open("GET", "http://ie.ce-it.ir/hw3/xml/home.xml", true);
+    request.open("GET", "xml/home.xml", true);
     request.send();
 
     request.onreadystatechange = function () {
