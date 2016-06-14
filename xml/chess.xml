@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chess turn="black">
+	<board white-cells="#D59330" black-cells="#A15C21">
+		<white field="top">
+			<pawn row="6" col="0" />
+			<pawn row="6" col="1" />
+			<pawn row="6" col="2" />
+			<pawn row="6" col="3" />
+			<!-- <pawn row="3" col="6" /> -->
+			<pawn row="6" col="5" />
+			<pawn row="6" col="6" />
+			<pawn row="6" col="7" />
+			<rook row="7" col="0" />
+			<rook row="7" col="7" />
+			<knight row="5" col="0" />
+			<knight row="7" col="6" />
+			<bishop type="black" row="7" col="2" />
+			<bishop type="white" row="7" col="5" />
+			<queen row="7" col="4" />
+			<king row="7" col="3" />
+		</white>
+		<black field="bottom">
+			<pawn row="1" col="0" />
+			<pawn row="1" col="1" />
+			<pawn row="1" col="2" />
+			<pawn row="2" col="3" />
+			<pawn row="1" col="4" />
+			<!-- <pawn row="2" col="5" /> -->
+			<pawn row="2" col="6" />
+			<!-- <pawn row="1" col="7" /> -->
+			<rook row="0" col="0" />
+			<rook row="0" col="7" />
+			<knight row="0" col="1" />
+			<knight row="0" col="6" />
+			<bishop type="white" row="0" col="2" />
+			<bishop type="black" row="0" col="5" />
+			<queen row="0" col="4" />
+			<king row="0" col="3" />
+		</black>
+	</board>
+	<score>
+		<white>2</white>
+		<black>1</black>
+	</score>
+	<chessmans>
+		<pawn unicode="&#9823;">
+			<white>http://ie.ce-it.ir/hw3/images/chessmans/pawn-white.png</white>
+			<black>http://ie.ce-it.ir/hw3/images/chessmans/pawn-black.png</black>
+		</pawn>
+		<rook unicode="&#9820;">
+			<white>http://ie.ce-it.ir/hw3/images/chessmans/rook-white.png</white>
+			<black>http://ie.ce-it.ir/hw3/images/chessmans/rook-black.png</black>
+		</rook>
+		<knight unicode="&#9822;">
+			<white>http://ie.ce-it.ir/hw3/images/chessmans/knight-white.png</white>
+			<black>http://ie.ce-it.ir/hw3/images/chessmans/knight-black.png</black>
+		</knight>
+		<bishop unicode="&#9821;">
+			<white>http://ie.ce-it.ir/hw3/images/chessmans/bishop-white.png</white>
+			<black>http://ie.ce-it.ir/hw3/images/chessmans/bishop-black.png</black>
+		</bishop>
+		<queen unicode="&#9819;">
+			<white>http://ie.ce-it.ir/hw3/images/chessmans/queen-white.png</white>
+			<black>http://ie.ce-it.ir/hw3/images/chessmans/queen-black.png</black>
+		</queen>
+		<king unicode="&#9818;">
+			<white>http://ie.ce-it.ir/hw3/images/chessmans/king-white.png</white>
+			<black>http://ie.ce-it.ir/hw3/images/chessmans/king-black.png</black>
+		</king>
+	</chessmans>
+</chess>

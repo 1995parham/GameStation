@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<home>
+	<header>
+		<background>#358FBA</background>
+		<pwd>#002641</pwd>
+		<gameicon color="#3B096E" hover="red">
+			<game color="#C79953" hover="#613C05" />
+		</gameicon>
+	</header>
+	<games max-onlines-background="red" max-onlines-border-width="2px" max-onlines-border-color="rgb(255, 134, 131)" max-onlines-border-style="dashed">
+		<game active="true">
+			<name>sudoku</name>
+			<image>http://ie.ce-it.ir/hw3/images/sudoku.png</image>
+			<url>xml/sudoku.xml</url>
+			<onlines>6</onlines>
+			<text color="black" hover="#88000D">Play Sudoku!</text>
+		</game>
+		<game active="true">
+			<name>chess</name>
+			<image>http://ie.ce-it.ir/hw3/images/chess.jpg</image>
+			<url>xml/chess.xml</url>
+			<onlines>3</onlines>
+			<text color="black" hover="#aaa">Play Chess!</text>
+		</game>
+		<game active="false">
+			<name>maze</name>
+			<image>http://ie.ce-it.ir/hw3/images/maze.png</image>
+			<url></url>
+			<onlines>0</onlines>
+			<text color="olive" hover="#880088">Play Maze!</text>
+		</game>
+		<game active="false">
+			<name>mario</name>
+			<image>http://ie.ce-it.ir/hw3/images/mario.gif</image>
+			<url></url>
+			<onlines>0</onlines>
+			<text color="green" hover="blue">Play mario!</text>
+		</game>
+		<game active="false">
+			<name>snake</name>
+			<image>http://ie.ce-it.ir/hw3/images/snake.jpg</image>
+			<url></url>
+			<onlines>0</onlines>
+			<text color="black" hover="#88000D">Play Snake!</text>
+		</game>
+	</games>
+</home>
